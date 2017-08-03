@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "chat.libertaria.world.connect_chat"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -19,12 +19,27 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile(name:'connect_sdk_android_shared_library-release',ext:'aar')
+    compile project(':connect_client')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     testCompile 'junit:junit:4.12'
+
+    compile 'org.slf4j:slf4j-api:1.7.20'
+    compile('com.github.tony19:logback-android-classic:1.1.1-5') {
+        exclude(group: 'com.google.android', module: 'android')
+    }
+
 }
