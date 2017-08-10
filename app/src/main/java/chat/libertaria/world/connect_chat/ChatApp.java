@@ -3,6 +3,7 @@ package chat.libertaria.world.connect_chat;
 
 import android.app.Application;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.libertaria.world.services.EnabledServices;
@@ -17,6 +18,8 @@ import world.libertaria.sdk.android.client.ConnectApp;
  */
 
 public class ChatApp extends ConnectApp{
+
+    public static final String INTENT_SERVICE_CONNECTED = "service_connected";
 
     public static final String INTENT_ACTION_PROFILE_CONNECTED = "profile_connected";
     public static final String INTENT_ACTION_PROFILE_CHECK_IN_FAIL= "profile_check_in_fail";
@@ -36,9 +39,6 @@ public class ChatApp extends ConnectApp{
 
     private static volatile ChatApp instance;
 
-    private ChatModule chatModule;
-    private PairingModule pairingModule;
-    private ProfilesModule profilesModule;
     /** Pub key of the selected profile */
     private String selectedProfilePubKey;
     private AppConf appConf;
@@ -60,10 +60,8 @@ public class ChatApp extends ConnectApp{
 
     @Override
     protected void onConnectClientServiceBind() {
-        super.onConnectClientServiceBind();
-        chatModule = (ChatModule) getModule(EnabledServices.CHAT);
-        pairingModule = (PairingModule) getModule(EnabledServices.PROFILE_PAIRING);
-        profilesModule = (ProfilesModule) getModule(EnabledServices.PROFILE_DATA);
+        Intent intent = new Intent(INTENT_SERVICE_CONNECTED);
+        broadcastManager.sendBroadcast(intent);
     }
 
     @Override
@@ -86,5 +84,10 @@ public class ChatApp extends ConnectApp{
 
     public NotificationManager getNotificationManager() {
         return notificationManager;
+    }
+
+    public void setSelectedProfile(String selectedProfile) {
+        this.selectedProfilePubKey = selectedProfile;
+        appConf.setSelectedProfPubKey(selectedProfile);
     }
 }
