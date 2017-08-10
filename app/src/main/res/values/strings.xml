@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Connect-chat</string>
+    <string name="empty_contact">Empty contact</string>
+    <string name="send">Send</string>
 </resources>
