@@ -34,6 +34,7 @@ import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_C
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_CONNECTED;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_DISCONNECTED;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_EXTRA_ERROR_DETAIL;
+import static chat.libertaria.world.connect_chat.ChatApp.INTENT_SERVICE_CONNECTED;
 
 /**
  * Created by furszy on 6/5/17.
@@ -58,6 +59,16 @@ public class BaseActivity extends AppCompatActivity {
     protected FrameLayout childContainer;
     protected LinearLayout btnReload;
 
+    private BroadcastReceiver appReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(INTENT_SERVICE_CONNECTED)){
+                loadBasics();
+                onServiceConnected();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -81,6 +92,8 @@ public class BaseActivity extends AppCompatActivity {
                     // nothing yet
                 }
             });
+
+            localBroadcastManager.registerReceiver(appReceiver,new IntentFilter(INTENT_SERVICE_CONNECTED));
 
         }catch (Exception e){
             e.printStackTrace();
@@ -137,6 +150,13 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        localBroadcastManager.unregisterReceiver(appReceiver);
+    }
+
     private class NotifReceiver extends BroadcastReceiver{
 
         @Override
@@ -169,6 +189,13 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showConnectionLoose(){
         btnReload.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Method to override
+     */
+    protected void onServiceConnected(){
+
     }
 
 
