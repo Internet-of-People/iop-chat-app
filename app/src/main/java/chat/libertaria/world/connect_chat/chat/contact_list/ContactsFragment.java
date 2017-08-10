@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static world.libertaria.shared.library.global.client.IntentBroadcastConstants.INTENT_EXTRA_PROF_KEY;
 
 
 public class ContactsFragment extends BaseAppRecyclerFragment<ProfileInformation> {
