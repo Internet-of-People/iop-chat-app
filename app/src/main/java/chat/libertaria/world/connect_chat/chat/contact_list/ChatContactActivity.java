@@ -1,5 +1,6 @@
 package chat.libertaria.world.connect_chat.chat.contact_list;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -8,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -74,6 +77,32 @@ public class ChatContactActivity extends BaseActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuItem menuAdd = menu.add(0, 0, Menu.NONE, R.string.next).setIcon(R.drawable.ic_add_acontact);
+        menuAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItem menuOptions = menu.add(0, 1, Menu.NONE, R.string.next).setIcon(R.drawable.ic_options);
+        menuOptions.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case 0:
+                // Add contacts
+                return true;
+            case 1:
+                // Open settings
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
