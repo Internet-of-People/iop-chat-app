@@ -13,8 +13,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ProfileHolder extends BaseViewHolder {
 
-    TextView txt_name;
-    CircleImageView img;
+    public TextView txt_name;
+    public CircleImageView img;
 
     public ProfileHolder(View itemView, int holderType) {
         super(itemView,holderType);
