@@ -2,4 +2,18 @@
     <string name="app_name">Connect-chat</string>
     <string name="empty_contact">Empty contact</string>
     <string name="send">Send</string>
+
+    <!-- Tutorial -->
+    <string name="welcome_message">To Libertaria chat \n this is an extension \n of the framework</string>
+    <string name="no_profile_message">If you dont have a profile</string>
+    <string name="btn_open_app">Open Connect App</string>
+    <string name="profile_message">Select from your existing profiles</string>
+    <string name="now_chat">Now you can chat \n with your Contacts</string>
+    <string name="select_profile">Select profile</string>
+    <string name="select_profile_title">Select a Profile</string>
+    <string name="welcome">Welcome</string>
+    <string name="start_chatting">start chating</string>
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+    <string name="select_spinner">Select your profile</string>
 </resources>
