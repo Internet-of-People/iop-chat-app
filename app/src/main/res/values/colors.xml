@@ -8,4 +8,6 @@
     <color name="time">#AFAFAF</color>
     <color name="transparent">#00000000</color>
     <color name="mainBlue">#2998FF</color>
+    <color name="mainPurple">#2053a1</color>
+    <color name="textTutorial">#5b6f81</color>
 </resources>
