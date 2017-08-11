@@ -11,6 +11,7 @@ import org.libertaria.world.profile_server.ProfileInformation;
 
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseAppRecyclerFragment;
+import chat.libertaria.world.connect_chat.chat.WaitingChatActivity;
 import tech.furszy.ui.lib.base.adapter.BaseAdapter;
 import tech.furszy.ui.lib.base.adapter.FermatListItemListeners;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static chat.libertaria.world.connect_chat.chat.WaitingChatActivity.REMOTE_PROFILE_PUB_KEY;
 import static world.libertaria.shared.library.global.client.IntentBroadcastConstants.INTENT_EXTRA_PROF_KEY;
 
 
@@ -41,9 +43,10 @@ public class ContactsFragment extends BaseAppRecyclerFragment<ProfileInformation
             @Override
             public void onItemClickListener(ProfileInformation data, int position) {
                 // todo: launch activity
-                /*Intent intent1 = new Intent(getActivity(), ProfileInformationActivity.class);
-                intent1.putExtra(INTENT_EXTRA_PROF_KEY, data.getPublicKey());
-                getActivity().startActivity(intent1);*/
+                Intent intent = new Intent(getActivity(), WaitingChatActivity.class);
+                intent.putExtra(REMOTE_PROFILE_PUB_KEY,data.getHexPublicKey());
+                intent.putExtra(WaitingChatActivity.IS_CALLING, true);
+                startActivity(intent);
             }
 
             @Override

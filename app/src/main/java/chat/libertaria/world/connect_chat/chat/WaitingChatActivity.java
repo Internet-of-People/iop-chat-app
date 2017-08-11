@@ -17,10 +17,14 @@ import org.libertaria.world.profile_server.ProfileInformation;
 import org.libertaria.world.profile_server.client.AppServiceCallNotAvailableException;
 import org.libertaria.world.profile_server.engine.futures.BaseMsgFuture;
 import org.libertaria.world.profile_server.engine.futures.MsgListenerFuture;
+import org.libertaria.world.profile_server.engine.listeners.ProfSerMsgListener;
+import org.libertaria.world.services.chat.ChatCallAlreadyOpenException;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import chat.libertaria.world.connect_chat.ChatApp;
 import chat.libertaria.world.connect_chat.R;
@@ -52,6 +56,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
     private String remotePk;
     private boolean isCalling;
     private ExecutorService executors;
+    private AtomicBoolean flag = new AtomicBoolean(false);
 
     private ScheduledExecutorService scheduledCallTimeout;
 
@@ -102,6 +107,116 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    private void call() {
+        if (flag.compareAndSet(false,true)) {
+            Toast.makeText(this,"Sending chat request..",Toast.LENGTH_SHORT).show();
+            if (executors==null)
+                executors = Executors.newSingleThreadExecutor();
+            executors.submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        MsgListenerFuture<Boolean> readyListener = new MsgListenerFuture<>();
+                        readyListener.setListener(new BaseMsgFuture.Listener<Boolean>() {
+                            @Override
+                            public void onAction(int messageId, Boolean object) {
+                                flag.set(false);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(WaitingChatActivity.this, "Chat request sent", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void onFail(int messageId, int status, String statusDetail) {
+                                Log.e("APP", "fail chat request: " + statusDetail + ", id: " + messageId);
+                                flag.set(false);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(WaitingChatActivity.this, "Chat request fail", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                        chatModule.requestChat(selectedProfPubKey,profileInformation, readyListener);
+                    } catch (ChatCallAlreadyOpenException e) {
+                        e.printStackTrace();
+                        // chat call already open
+                        // first send the acceptance
+                        try {
+                            chatModule.acceptChatRequest(selectedProfPubKey,profileInformation.getHexPublicKey(), new ProfSerMsgListener<Boolean>() {
+                                @Override
+                                public void onMessageReceive(int messageId, Boolean message) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            flag.set(false);
+                                            // let's go to the chat again
+                                            Intent intent1 = new Intent(WaitingChatActivity.this, ChatActivity.class);
+                                            intent1.putExtra(REMOTE_PROFILE_PUB_KEY, profileInformation.getHexPublicKey());
+                                            startActivity(intent1);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onMsgFail(int messageId, int statusValue, final String details) {
+                                    Log.e("TAG","chat connection fail "+details);
+                                    flag.set(false);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(WaitingChatActivity.this,"Chat connection fail\n"+details,Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public String getMessageName() {
+                                    return "accept_chat_request";
+                                }
+                            });
+
+                        } catch (AppServiceCallNotAvailableException e1){
+                            e1.printStackTrace();
+                            flag.set(false);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(WaitingChatActivity.this,"Remote profile calling you.., closing the connection\nPlease try again",Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        } catch (final Exception e1) {
+                            e1.printStackTrace();
+                            flag.set(false);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(WaitingChatActivity.this,"Chat connection fail\n"+e1.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(WaitingChatActivity.this, "Chat call fail\nplease try again later", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        flag.set(false);
+                    }
+                }
+            });
+        }
+    }
+
     private void scheduleCallTimeout() {
         scheduledCallTimeout = Executors.newSingleThreadScheduledExecutor();
         scheduledCallTimeout.schedule(new Runnable() {
@@ -130,7 +245,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
         localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ChatApp.INTENT_CHAT_ACCEPTED_BROADCAST));
         localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ChatApp.INTENT_CHAT_REFUSED_BROADCAST));
         localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ACTION_ON_CHAT_DISCONNECTED));
-        if (executors==null)
+        /*if (executors==null)
             executors = Executors.newSingleThreadExecutor();
         executors.submit(new Runnable() {
             @Override
@@ -161,7 +276,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
 
                 }
             }
-        });
+        });*/
 
         profileInformation = profilesModule.getKnownProfile(selectedProfPubKey,remotePk);
         txt_name.setText(profileInformation.getName());
@@ -171,6 +286,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
         }
         if(isCalling){
             txt_title.setText("Waiting for "+profileInformation.getName()+" response...");
+            call();
         }else {
             txt_title.setText("Call from "+profileInformation.getName());
         }

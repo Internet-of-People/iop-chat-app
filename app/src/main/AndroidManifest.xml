@@ -21,6 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".chat.WaitingChatActivity"/>
+        <activity android:name=".chat.ChatActivity"/>
 
 
     </application>

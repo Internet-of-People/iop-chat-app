@@ -4,6 +4,7 @@ package chat.libertaria.world.connect_chat;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
 import org.libertaria.world.services.EnabledServices;
@@ -12,6 +13,7 @@ import org.libertaria.world.services.interfaces.PairingModule;
 import org.libertaria.world.services.interfaces.ProfilesModule;
 
 import world.libertaria.sdk.android.client.ConnectApp;
+import world.libertaria.shared.library.services.chat.ChatIntentsConstants;
 
 /**
  * Created by furszy on 8/2/17.
@@ -56,6 +58,10 @@ public class ChatApp extends ConnectApp{
         selectedProfilePubKey = appConf.getSelectedProfPubKey();
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_CONNECTED));
+        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_DISCONNECTED));
+        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_MSG_RECEIVED));
     }
 
     @Override

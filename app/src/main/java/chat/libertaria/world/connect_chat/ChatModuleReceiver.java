@@ -45,6 +45,7 @@ public class ChatModuleReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        log.info("chat module receiver");
         if (action.equals(ACTION_ON_CHAT_CONNECTED)){
             String localPk = intent.getStringExtra(EXTRA_INTENT_LOCAL_PROFILE);
             String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
