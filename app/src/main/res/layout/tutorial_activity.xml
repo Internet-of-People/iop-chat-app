@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <chat.libertaria.world.connect_chat.utils.CustomFontTextView
         android:id="@+id/tutorial_title"
         android:gravity="center"
         android:layout_centerHorizontal="true"
@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:textColor="@color/textTutorial"
         android:textStyle="bold"
-        android:textAllCaps="true"
         android:text="@string/welcome"
         android:textSize="22sp"/>
 
