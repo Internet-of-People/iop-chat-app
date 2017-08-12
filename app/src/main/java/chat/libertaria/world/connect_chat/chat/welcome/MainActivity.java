@@ -31,6 +31,7 @@ import java.util.List;
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
 import chat.libertaria.world.connect_chat.chat.contact_list.ChatContactActivity;
+import chat.libertaria.world.connect_chat.utils.CustomFontTextView;
 
 import static chat.libertaria.world.connect_chat.R.id.text;
 
@@ -47,7 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Spinner spinner;
     private int[] layouts;
     private Button btnNext, btn_open_app;
-    private TextView txt_title;
+    private CustomFontTextView txt_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         btnNext = (Button) findViewById(R.id.btn_next);
 
-        txt_title = (TextView) findViewById(R.id.tutorial_title);
+        txt_title = (CustomFontTextView) findViewById(R.id.tutorial_title);
 
         btn_open_app = (Button) findViewById(R.id.btn_open_app);
 
