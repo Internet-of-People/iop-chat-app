@@ -12,19 +12,23 @@
         android:gravity="center"
         android:orientation="vertical"
         android:layout_marginBottom="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentTop="true">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="40dp"
-            app:civ_border_color="#71b6ff"
-            app:civ_border_width="1dp" />
 
-        <!--android:src="@drawable/img_profile"-->
+        <LinearLayout
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:gravity="center"
+            android:layout_marginBottom="40dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+ />
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/txt_name"
@@ -32,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="My Name"
-            android:textColor="@color/mainBlue"
+            android:textColor="@color/mainPurple"
             android:textSize="18sp" />
 
         <TextView
@@ -40,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/mainText"
+            android:text="@string/chat_request_send"
             style="@style/MessageText"/>
 
         <LinearLayout
@@ -51,22 +56,22 @@
             android:gravity="center"
             android:layout_gravity="center">
 
-            <!--android:src="@drawable/ic_close_chat"-->
             <ImageButton
                 android:background="@color/transparent"
                 android:id="@+id/btn_cancel_chat"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:paddingStart="40dp"
+                android:src="@drawable/ic_close_chat"
                 android:layout_height="wrap_content" />
 
-            <!--android:src="@drawable/ic_open_chat"-->
             <ImageButton
                 android:background="@color/transparent"
                 android:id="@+id/btn_open_chat"
                 android:layout_weight="1"
                 android:paddingEnd="40dp"
                 android:layout_width="0dp"
+                android:src="@drawable/ic_open_chat"
                 android:layout_height="wrap_content" />
 
 
@@ -77,10 +82,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/single_cancel_container">
 
-            <!--android:src="@drawable/ic_close_chat"-->
-
             <ImageButton
                 android:background="@color/transparent"
+                android:src="@drawable/ic_close_chat"
                 android:id="@+id/btn_cancel_chat_alone"
                 android:layout_weight="1"
                 android:layout_width="0dp"
