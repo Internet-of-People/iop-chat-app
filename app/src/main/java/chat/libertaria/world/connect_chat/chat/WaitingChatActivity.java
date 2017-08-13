@@ -339,6 +339,8 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void acceptChatRequest() {
+        if (executors==null)
+            executors = Executors.newSingleThreadExecutor();
         executors.submit(new Runnable() {
             @Override
             public void run() {
@@ -371,6 +373,11 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                         }
                     });
                     chatModule.acceptChatRequest(selectedProfPubKey,profileInformation.getHexPublicKey(), future);
+
+                    /*Intent intent = new Intent(WaitingChatActivity.this,ChatActivity.class);
+                    intent.putExtra(REMOTE_PROFILE_PUB_KEY,remotePk);
+                    startActivity(intent);*/
+
                 } catch (AppServiceCallNotAvailableException e){
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {

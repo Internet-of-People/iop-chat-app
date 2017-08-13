@@ -46,19 +46,23 @@ public class ChatModuleReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         log.info("chat module receiver");
-        if (action.equals(ACTION_ON_CHAT_CONNECTED)){
-            String localPk = intent.getStringExtra(EXTRA_INTENT_LOCAL_PROFILE);
-            String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
-            boolean isLocalCreator = intent.getBooleanExtra(EXTRA_INTENT_IS_LOCAL_CREATOR,false);
-            onChatConnected(localPk,remotePk,isLocalCreator);
-        }else if (action.equals(ACTION_ON_CHAT_DISCONNECTED)){
-            String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
-            String reason = intent.getStringExtra(EXTRA_INTENT_DETAIL);
-            onChatDisconnected(remotePk,reason);
-        }else if (action.equals(ACTION_ON_CHAT_MSG_RECEIVED)){
-            String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
-            BaseMsg baseMsg = (BaseMsg) intent.getSerializableExtra(EXTRA_INTENT_CHAT_MSG);
-            onMsgReceived(remotePk,baseMsg);
+        try {
+            if (action.equals(ACTION_ON_CHAT_CONNECTED)) {
+                String localPk = intent.getStringExtra(EXTRA_INTENT_LOCAL_PROFILE);
+                String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
+                boolean isLocalCreator = intent.getBooleanExtra(EXTRA_INTENT_IS_LOCAL_CREATOR, false);
+                onChatConnected(localPk, remotePk, isLocalCreator);
+            } else if (action.equals(ACTION_ON_CHAT_DISCONNECTED)) {
+                String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
+                String reason = intent.getStringExtra(EXTRA_INTENT_DETAIL);
+                onChatDisconnected(remotePk, reason);
+            } else if (action.equals(ACTION_ON_CHAT_MSG_RECEIVED)) {
+                String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
+                BaseMsg baseMsg = (BaseMsg) intent.getSerializableExtra(EXTRA_INTENT_CHAT_MSG);
+                onMsgReceived(remotePk, baseMsg);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -81,7 +85,7 @@ public class ChatModuleReceiver extends BroadcastReceiver {
                 Notification not = new Notification.Builder(app)
                         .setContentTitle("Hey, chat notification received")
                         .setContentText(name + " want to chat with you!")
-                        //.setSmallIcon(R.drawable.ic_chat_disable)
+                        .setSmallIcon(R.drawable.ic_open_chat)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
                         .build();

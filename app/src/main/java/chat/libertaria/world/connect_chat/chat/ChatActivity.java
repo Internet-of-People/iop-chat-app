@@ -149,7 +149,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             final String text = edit_msg.getText().toString();
             if (text.length() > 0) {
                 edit_msg.setText("");
-                // // TODO: 7/25/17
                 executor.submit(new Runnable() {
                     @Override
                     public void run() {
@@ -165,6 +164,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                                 @Override
                                 public void onMsgFail(int messageId, int statusValue, String details) {
                                     Log.w("Chat", "msg fail!");
+                                    Toast.makeText(ChatActivity.this,"Msg fail!",Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
