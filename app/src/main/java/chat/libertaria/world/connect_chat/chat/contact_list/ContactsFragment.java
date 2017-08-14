@@ -33,7 +33,7 @@ public class ContactsFragment extends BaseAppRecyclerFragment<ProfileInformation
         View view = super.onCreateView(inflater, container, savedInstanceState);
         setEmptyText(getResources().getString(R.string.empty_contact));
         setEmptyTextColor(Color.parseColor("#4d4d4d"));
-        //setEmptyView(R.drawable.img_contact_empty);
+        setEmptyView(R.drawable.img_contact_empty);
         return view;
     }
 
