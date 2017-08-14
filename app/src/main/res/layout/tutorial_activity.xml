@@ -3,7 +3,7 @@
     android:id="@+id/activity_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="40dp"
+    android:paddingTop="30dp"
     android:paddingBottom="20dp">
 
 
@@ -23,7 +23,7 @@
         android:textColor="@color/textTutorial"
         android:textStyle="bold"
         android:text="@string/welcome"
-        android:textSize="22sp"/>
+        android:textSize="28sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

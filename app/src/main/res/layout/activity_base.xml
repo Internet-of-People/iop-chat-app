@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         app:elevation="0dp"
-        android:background="#53acff"
+        android:background="@color/mainPurple"
         app:theme="@style/ToolBarStyle"
         app:popupTheme="@style/AppStartTheme" />
 
