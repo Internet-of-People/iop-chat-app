@@ -15,7 +15,7 @@
 
         </activity>
         <activity android:name=".chat.contact_list.ChatContactActivity"/>
-        <activity android:name=".chat.welcome.MainActivity">
+        <activity android:name=".chat.welcome.MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

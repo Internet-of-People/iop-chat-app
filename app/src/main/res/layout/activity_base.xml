@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         app:elevation="0dp"
-        android:background="#53acff"
+        android:background="@color/mainPurple"
         app:theme="@style/ToolBarStyle"
         app:popupTheme="@style/AppStartTheme" />
 
@@ -20,7 +20,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4a4a4a"
+        android:background="#8d8d8d"
         android:layout_gravity="center"
         android:padding="7dp"
         android:paddingStart="15dp"
@@ -34,11 +34,11 @@
             android:text="Reload"
             android:textColor="@color/white"
             android:textSize="15sp"/>
-        <!--<ImageView
+        <ImageView
             android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_reload"/>-->
+            android:src="@drawable/ic_reload"/>
 
     </LinearLayout>
 

@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:paddingTop="60dp"
+    android:paddingTop="100dp"
     android:paddingLeft="50dp"
     android:paddingRight="50dp">
 
@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="@color/textTutorial"
         android:text="@string/no_profile_message"
         android:layout_marginBottom="30dp"/>
 
@@ -64,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="@color/textTutorial"
         android:text="@string/profile_message"
         android:layout_marginBottom="30dp"/>
 
@@ -71,15 +73,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_border_grey"
-        android:padding="20dp">
+        >
 
         <Spinner
-            android:gravity="center_vertical"
+            android:gravity="left"
             android:id="@+id/spinner"
             android:layout_width="match_parent"
-            style="@style/spinner_style"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:background="@drawable/bg_spinner"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:popupBackground="#ffffff"
             android:layout_height="wrap_content"
             android:prompt="@string/select_spinner"
