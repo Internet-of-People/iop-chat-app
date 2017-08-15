@@ -92,10 +92,10 @@ public class ChatContactActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuItem menuAdd = menu.add(OPTION_ADD_CONTACT, 0, Menu.NONE, R.string.next).setIcon(R.drawable.ic_add_acontact);
+        MenuItem menuAdd = menu.add(OPTION_ADD_CONTACT, 0, Menu.NONE, R.string.add_contact).setIcon(R.drawable.ic_add_acontact);
         menuAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        MenuItem menuOptions = menu.add(OPTION_SETTINGS, 1, Menu.NONE, R.string.next).setIcon(R.drawable.ic_options);
-        menuOptions.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItem menuOptions = menu.add(OPTION_SETTINGS, 1, Menu.NONE, R.string.change_profile);
+        menuOptions.setIcon(R.drawable.ic_options);
         return super.onCreateOptionsMenu(menu);
     }
 
