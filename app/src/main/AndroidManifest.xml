@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".chat.WaitingChatActivity"/>
         <activity android:name=".chat.ChatActivity"/>
+        <activity android:name=".chat.settings.ChangeProfile"/>
 
 
     </application>

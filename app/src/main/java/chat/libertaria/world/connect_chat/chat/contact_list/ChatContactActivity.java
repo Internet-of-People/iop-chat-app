@@ -26,6 +26,7 @@ import java.util.List;
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
 import chat.libertaria.world.connect_chat.base.OpenConnectUtil;
+import chat.libertaria.world.connect_chat.chat.settings.ChangeProfile;
 
 /**
  * Created by Neoperol on 7/3/17.
@@ -43,11 +44,11 @@ public class ChatContactActivity extends BaseActivity {
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
         root = getLayoutInflater().inflate(R.layout.chat_contacts_activity, container);
         setTitle("Contact chat");
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#21619C")));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2053A1")));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#21619C"));
+            window.setStatusBarColor(Color.parseColor("#2053A1"));
         }
         viewPager = (ViewPager) root.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -110,6 +111,8 @@ public class ChatContactActivity extends BaseActivity {
                 return true;
             case OPTION_SETTINGS:
                 // Open settings
+                Intent myIntent = new Intent(this, ChangeProfile.class);
+                startActivity(myIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

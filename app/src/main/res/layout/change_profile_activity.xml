@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="100dp"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/textTutorial"
+        android:text="@string/profile_message"
+        android:textSize="18sp"
+        android:layout_marginBottom="30dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_border_grey"
+        >
+
+        <Spinner
+            android:gravity="left"
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_spinner"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:popupBackground="#ffffff"
+            android:layout_height="wrap_content"
+            android:prompt="@string/select_spinner"
+            android:textColor="@color/textTutorial"/>
+
+    </LinearLayout>
+
+</LinearLayout>
