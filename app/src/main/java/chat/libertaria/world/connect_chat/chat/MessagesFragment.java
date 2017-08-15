@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -91,12 +92,12 @@ public class MessagesFragment extends RecyclerFragment<ChatMsgUi> {
                 holder.txt_message.setText(data.getText());
                 if (data.isMine()){
                     holder.container_msg.setGravity(Gravity.END);
-                    //holder.txt_message.setBackgroundResource(R.drawable.bubble_right);
+                    holder.txt_message.setBackgroundResource(R.drawable.bubble_right);
                     holder.txt_message.setGravity(Gravity.END);
                     holder.txt_time.setPadding(0,10,20,10);
                     holder.txt_time.setGravity(Gravity.END);
                 }else {
-                    //holder.txt_message.setBackgroundResource(R.drawable.bubble_left);
+                    holder.txt_message.setBackgroundResource(R.drawable.bubble_left);
                     holder.container_msg.setGravity(Gravity.START);
                     holder.txt_message.setGravity(Gravity.START);
                     holder.txt_time.setGravity(Gravity.START);
