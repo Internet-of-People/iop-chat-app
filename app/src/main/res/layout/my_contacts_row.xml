@@ -13,6 +13,7 @@
         android:layout_height="60dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@drawable/img_profile"
             android:layout_width="38.4dp"
             android:layout_height="38.4dp"
             android:id="@+id/img_profile"
@@ -21,7 +22,7 @@
             app:civ_border_width="1dp"
             />
 
-        <!--android:src="@drawable/img_profile"-->
+
 
         <TextView
             android:layout_width="wrap_content"
