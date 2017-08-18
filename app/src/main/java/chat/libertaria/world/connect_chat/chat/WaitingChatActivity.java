@@ -142,6 +142,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                         @Override
                                         public void run() {
                                             Toast.makeText(WaitingChatActivity.this, "Chat request fail", Toast.LENGTH_LONG).show();
+                                            onBackPressed();
                                         }
                                     });
                                 }
@@ -177,6 +178,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                             @Override
                                             public void run() {
                                                 Toast.makeText(WaitingChatActivity.this, "Chat connection fail\n" + details, Toast.LENGTH_LONG).show();
+                                                onBackPressed();
                                             }
                                         });
                                     }
@@ -194,6 +196,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                     @Override
                                     public void run() {
                                         Toast.makeText(WaitingChatActivity.this, "Remote profile calling you.., closing the connection\nPlease try again", Toast.LENGTH_LONG).show();
+                                        onBackPressed();
                                     }
                                 });
 
@@ -203,6 +206,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        onBackPressed();
                                         Toast.makeText(WaitingChatActivity.this, "Chat connection fail\n" + e1.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -213,6 +217,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    onBackPressed();
                                     Toast.makeText(WaitingChatActivity.this, "Chat call fail\nplease try again later", Toast.LENGTH_LONG).show();
                                 }
                             });
