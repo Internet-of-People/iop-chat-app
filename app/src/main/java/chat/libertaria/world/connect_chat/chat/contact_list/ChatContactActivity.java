@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -35,7 +36,8 @@ import chat.libertaria.world.connect_chat.chat.settings.ChangeProfile;
 public class ChatContactActivity extends BaseActivity {
 
     private static final int OPTION_ADD_CONTACT = 0;
-    private static final int OPTION_SETTINGS = 1;
+    private static final int OPTION_MYPROFILE = 1;
+    private static final int OPTION_CHANGE = 2;
 
 
     private View root;
@@ -95,8 +97,9 @@ public class ChatContactActivity extends BaseActivity {
         super.onCreateOptionsMenu(menu);
         MenuItem menuAdd = menu.add(OPTION_ADD_CONTACT, 0, Menu.NONE, R.string.add_contact).setIcon(R.drawable.ic_add_acontact);
         menuAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        MenuItem menuOptions = menu.add(OPTION_SETTINGS, 1, Menu.NONE, R.string.change_profile);
+        MenuItem menuOptions = menu.add(0,OPTION_MYPROFILE ,0, R.string.my_profile);
         menuOptions.setIcon(R.drawable.ic_options);
+        menu.add(0,OPTION_CHANGE ,0, R.string.change_profile);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -109,7 +112,11 @@ public class ChatContactActivity extends BaseActivity {
                 // Add contacts
                 OpenConnectUtil.openSendRequestScreen(this);
                 return true;
-            case OPTION_SETTINGS:
+            case OPTION_MYPROFILE:
+                // Open MyProfile
+                Toast.makeText(this, "Open My Profile", Toast.LENGTH_SHORT).show();
+                return true;
+            case OPTION_CHANGE:
                 // Open settings
                 Intent myIntent = new Intent(this, ChangeProfile.class);
                 startActivity(myIntent);
