@@ -76,8 +76,8 @@ public class ChatModuleReceiver extends BroadcastReceiver {
             intent.putExtra(REMOTE_PROFILE_PUB_KEY, remoteProfilePubKey);
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
             if (isLocalCreator) {
-                intent.putExtra(WaitingChatActivity.IS_CALLING, false);
-                app.startActivity(intent);
+                //intent.putExtra(WaitingChatActivity.IS_CALLING, false);
+                //app.startActivity(intent);
             } else {
                 PendingIntent pendingIntent = PendingIntent.getActivity(app, 0, intent, 0);
                 // todo: null pointer found.
