@@ -35,7 +35,8 @@ import chat.libertaria.world.connect_chat.chat.settings.ChangeProfile;
 public class ChatContactActivity extends BaseActivity {
 
     private static final int OPTION_ADD_CONTACT = 0;
-    private static final int OPTION_SETTINGS = 1;
+    private static final int OPTION_SELECTED_PROFILE = 1;
+    private static final int OPTION_CHANGE_PROFILE = 2;
 
 
     private View root;
@@ -95,8 +96,12 @@ public class ChatContactActivity extends BaseActivity {
         super.onCreateOptionsMenu(menu);
         MenuItem menuAdd = menu.add(OPTION_ADD_CONTACT, 0, Menu.NONE, R.string.add_contact).setIcon(R.drawable.ic_add_acontact);
         menuAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        MenuItem menuOptions = menu.add(OPTION_SETTINGS, 1, Menu.NONE, R.string.change_profile);
-        menuOptions.setIcon(R.drawable.ic_options);
+        MenuItem menuMyProfile = menu.add(OPTION_SELECTED_PROFILE, 1, Menu.NONE, R.string.my_profile);
+        menuMyProfile.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItem menuOptions = menu.add(OPTION_CHANGE_PROFILE, 2, Menu.NONE, R.string.change_profile);
+        menuOptions.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -109,7 +114,10 @@ public class ChatContactActivity extends BaseActivity {
                 // Add contacts
                 OpenConnectUtil.openSendRequestScreen(this);
                 return true;
-            case OPTION_SETTINGS:
+            case OPTION_SELECTED_PROFILE:
+                OpenConnectUtil.openMyProfileScreen(this,selectedProfPubKey);
+                break;
+            case OPTION_CHANGE_PROFILE:
                 // Open settings
                 Intent myIntent = new Intent(this, ChangeProfile.class);
                 startActivity(myIntent);

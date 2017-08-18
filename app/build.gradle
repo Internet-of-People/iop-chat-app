@@ -50,4 +50,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     // protobuf
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.3.1'
+
+
 }
