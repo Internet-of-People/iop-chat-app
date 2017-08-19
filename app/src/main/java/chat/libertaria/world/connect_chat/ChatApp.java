@@ -96,4 +96,8 @@ public class ChatApp extends ConnectApp{
         this.selectedProfilePubKey = selectedProfile;
         appConf.setSelectedProfPubKey(selectedProfile);
     }
+
+    public AppConf getAppConf() {
+        return appConf;
+    }
 }

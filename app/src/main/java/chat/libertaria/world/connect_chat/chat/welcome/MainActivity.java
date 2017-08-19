@@ -87,6 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             // move to next screen
             viewPager.setCurrentItem(current);
         } else {
+            // save profile and init app
+            app.getAppConf().setAppInit();
             launchHomeScreen();
         }
     }

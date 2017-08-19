@@ -11,6 +11,7 @@ import world.libertaria.shared.library.ui.Configurations;
 public class AppConf extends Configurations{
 
     public static String PREF_APP_PK = "selected_prof_pub_key";
+    public static String PREF_APP_INIT = "app_init";
 
     public AppConf(SharedPreferences prefs) {
         super(prefs);
@@ -22,5 +23,13 @@ public class AppConf extends Configurations{
 
     public void setSelectedProfPubKey(String selectedProfPubKey){
         save(PREF_APP_PK,selectedProfPubKey);
+    }
+
+    public void setAppInit() {
+        save(PREF_APP_INIT,true);
+    }
+
+    public boolean getAppInit(){
+        return getBoolean(PREF_APP_INIT,false);
     }
 }
