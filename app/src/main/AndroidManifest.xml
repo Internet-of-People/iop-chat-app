@@ -30,6 +30,17 @@
         <activity android:name=".chat.ChatActivity"/>
         <activity android:name=".chat.settings.ChangeProfile"/>
 
+        <receiver android:name="ChatModuleReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.furszy.broadcast.on_chat_connected"></action>
+                <action android:name="org.furszy.broadcast.on_chat_disconnected"></action>
+                <action android:name="org.furszy.broadcast.on_chat_msg_received"></action>
+
+
+            </intent-filter>
+        </receiver>
+
 
     </application>
 

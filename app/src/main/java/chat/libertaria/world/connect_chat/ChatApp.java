@@ -7,11 +7,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.snappydb.SnappydbException;
+
 import org.libertaria.world.services.EnabledServices;
 import org.libertaria.world.services.chat.ChatModule;
 import org.libertaria.world.services.interfaces.PairingModule;
 import org.libertaria.world.services.interfaces.ProfilesModule;
 
+import java.io.File;
+
+import chat.libertaria.world.connect_chat.chat.store.RemoteProfilesStore;
 import world.libertaria.sdk.android.client.ConnectApp;
 import world.libertaria.shared.library.services.chat.ChatIntentsConstants;
 
@@ -35,16 +40,16 @@ public class ChatApp extends ConnectApp{
     public static final String INTENT_CHAT_TEXT_RECEIVED = "text";
 
     /** Preferences */
-    private static final String PREFS_NAME = "app_prefs";
+    public static final String PREFS_NAME = "app_prefs";
 
     private NotificationManager notificationManager;
+    private RemoteProfilesStore remoteProfilesStore;
 
     private static volatile ChatApp instance;
 
     /** Pub key of the selected profile */
     private String selectedProfilePubKey;
     private AppConf appConf;
-    private ChatModuleReceiver chatModuleReceiver = new ChatModuleReceiver();
 
     public static ChatApp getInstance(){
         return instance;
@@ -56,12 +61,20 @@ public class ChatApp extends ConnectApp{
         instance = this;
         appConf = new AppConf(getSharedPreferences(PREFS_NAME, 0));
         selectedProfilePubKey = appConf.getSelectedProfPubKey();
-
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        try {
+            remoteProfilesStore = new RemoteProfilesStore(getDirPrivateMode("remotes_profiles_store").getAbsolutePath());
 
-        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_CONNECTED));
+        /*registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_CONNECTED));
         registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_DISCONNECTED));
-        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_MSG_RECEIVED));
+        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_MSG_RECEIVED));*/
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public File getDirPrivateMode(String name) {
+        return getDir(name,MODE_PRIVATE);
     }
 
     @Override
@@ -99,5 +112,9 @@ public class ChatApp extends ConnectApp{
 
     public AppConf getAppConf() {
         return appConf;
+    }
+
+    public RemoteProfilesStore getRemoteProfilesStore() {
+        return remoteProfilesStore;
     }
 }
