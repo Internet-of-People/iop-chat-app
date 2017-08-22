@@ -147,7 +147,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                         public void run() {
 
                                             errorDialog = DialogsUtil.buildSimpleTextDialog(
-                                                    this,
+                                                    WaitingChatActivity.this,
                                                     getString(R.string.chat_request_fail_title),
                                                     getString(R.string.chat_request_fail)
 
