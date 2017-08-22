@@ -20,6 +20,8 @@ import org.libertaria.world.profile_server.engine.futures.MsgListenerFuture;
 import org.libertaria.world.profile_server.engine.listeners.ProfSerMsgListener;
 import org.libertaria.world.services.chat.ChatCallAlreadyOpenException;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -29,6 +31,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import chat.libertaria.world.connect_chat.ChatApp;
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
+import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
+import chat.libertaria.world.connect_chat.utils.DialogsUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_CHAT_REFUSED_BROADCAST;
@@ -46,7 +50,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
 
     /** Call timeout in minutes */
     private static final long CALL_TIMEOUT = 1;
-
+    private SimpleTextDialog errorDialog;
     private View root;
     private TextView txt_name;
     private CircleImageView img_profile;
@@ -141,7 +145,22 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(WaitingChatActivity.this, "Chat request fail", Toast.LENGTH_LONG).show();
+
+                                            errorDialog = DialogsUtil.buildSimpleTextDialog(
+                                                    WaitingChatActivity.this,
+                                                    getString(R.string.chat_request_fail_title),
+                                                    getString(R.string.chat_request_fail)
+
+                                            );
+                                            errorDialog.show(getFragmentManager(),getResources().getString(R.string.chat_request_fail));
+
+                                            final Timer t = new Timer();
+                                            t.schedule(new TimerTask() {
+                                                public void run() {
+                                                    errorDialog.dismiss();
+                                                    t.cancel();
+                                                }
+                                            }, 4000);
                                             onBackPressed();
                                         }
                                     });
