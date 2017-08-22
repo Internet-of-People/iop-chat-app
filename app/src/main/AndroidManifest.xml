@@ -36,6 +36,7 @@
                 <action android:name="org.furszy.broadcast.on_chat_connected"></action>
                 <action android:name="org.furszy.broadcast.on_chat_disconnected"></action>
                 <action android:name="org.furszy.broadcast.on_chat_msg_received"></action>
+                <action android:name="world.libertaria.broadcast.OPEN_CHAT_APP"></action>
 
 
             </intent-filter>

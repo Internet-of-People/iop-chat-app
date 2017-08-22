@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import chat.libertaria.world.connect_chat.chat.WaitingChatActivity;
+import chat.libertaria.world.connect_chat.chat.contact_list.ChatContactActivity;
 import world.libertaria.sdk.android.client.ClientServiceConnectHelper;
 import world.libertaria.sdk.android.client.ConnectClientService;
 import world.libertaria.sdk.android.client.ConnectReceiver;
@@ -41,6 +42,7 @@ import static world.libertaria.shared.library.global.client.IntentBroadcastConst
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.ACTION_ON_CHAT_CONNECTED;
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.ACTION_ON_CHAT_DISCONNECTED;
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.ACTION_ON_CHAT_MSG_RECEIVED;
+import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.ACTION_OPEN_CHAT_APP;
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.EXTRA_INTENT_CHAT_MSG;
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.EXTRA_INTENT_DETAIL;
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.EXTRA_INTENT_IS_LOCAL_CREATOR;
@@ -105,10 +107,21 @@ public class ChatModuleReceiver extends ConnectReceiver {
                 String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
                 BaseMsg baseMsg = (BaseMsg) intent.getSerializableExtra(EXTRA_INTENT_CHAT_MSG);
                 onMsgReceived(remotePk, baseMsg);
+            } else if(action.equals(ACTION_OPEN_CHAT_APP)){
+                String localPk = intent.getStringExtra(EXTRA_INTENT_LOCAL_PROFILE);
+                String remotePk = intent.getStringExtra(EXTRA_INTENT_REMOTE_PROFILE);
+                openChatApp(context,localPk,remotePk);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void openChatApp(Context context,String localPk, String remotePk) {
+        log.info("open chat: ");
+        Intent intent = new Intent(context, ChatContactActivity.class);
+        intent.putExtra(REMOTE_PROFILE_PUB_KEY,remotePk);
+        context.startActivity(intent);
     }
 
 

@@ -57,15 +57,16 @@ public class ContactsFragment extends BaseAppRecyclerFragment<ProfileInformation
     }
 
     @Override
+    protected void onServiceConnected() {
+        super.onServiceConnected();
+        refresh();
+    }
+
+    @Override
     protected List onLoading() {
         try {
             if (profilesModule!=null)
                 return profilesModule.getKnownProfiles(selectedProfilePubKey);
-            else {
-                loadBasics();
-                TimeUnit.SECONDS.sleep(1);
-                onLoading();
-            }
         }catch (Exception e){
             log.info("onLoading",e);
         }

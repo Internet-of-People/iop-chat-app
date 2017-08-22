@@ -125,7 +125,4 @@ public class ChatContactActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }
