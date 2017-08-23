@@ -29,11 +29,18 @@ import org.libertaria.world.services.interfaces.ProfilesModule;
 
 import chat.libertaria.world.connect_chat.ChatApp;
 import chat.libertaria.world.connect_chat.R;
+import chat.libertaria.world.connect_chat.base.dialogs.DialogListener;
+import chat.libertaria.world.connect_chat.base.dialogs.SimpleDialog;
+import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
+import chat.libertaria.world.connect_chat.chat.settings.ChangeProfileActivity;
+import chat.libertaria.world.connect_chat.chat.welcome.MainActivity;
+import chat.libertaria.world.connect_chat.utils.DialogsUtil;
 
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_CHECK_IN_FAIL;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_CONNECTED;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_DISCONNECTED;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_EXTRA_ERROR_DETAIL;
+import static chat.libertaria.world.connect_chat.ChatApp.INTENT_PROFILE_NOT_EXIST_ON_THE_PLATFORM;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_SERVICE_CONNECTED;
 
 /**
@@ -62,7 +69,8 @@ public class BaseActivity extends AppCompatActivity {
     private BroadcastReceiver appReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(INTENT_SERVICE_CONNECTED)){
+            String action = intent.getAction();
+            if (action.equals(INTENT_SERVICE_CONNECTED)){
                 loadBasics();
                 onServiceConnected();
             }
@@ -138,6 +146,27 @@ public class BaseActivity extends AppCompatActivity {
         localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_DISCONNECTED));
         localBroadcastManager.registerReceiver(notifReceiver,new IntentFilter(INTENT_ACTION_PROFILE_CHECK_IN_FAIL));
         localBroadcastManager.registerReceiver(notifReceiver,new IntentFilter(INTENT_ACTION_PROFILE_CONNECTED));
+
+        if(!app.getExistProfile() && !(this instanceof ChangeProfileActivity) && !(this instanceof MainActivity)){
+            SimpleDialog simpleTextDialog = DialogsUtil.buildSimpleTextDialog2(
+                    this,
+                    "Initialization",
+                    "Selected profile doesn't exist on the platform\n\nPlease select another one"
+            );
+            simpleTextDialog.setListener(new DialogListener() {
+                @Override
+                public void cancel(boolean isActionCompleted) {
+                    launchSelectProfile();
+                }
+            });
+            simpleTextDialog.show();
+        }
+    }
+
+    private void launchSelectProfile(){
+        Intent intent = new Intent(this, ChangeProfileActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override

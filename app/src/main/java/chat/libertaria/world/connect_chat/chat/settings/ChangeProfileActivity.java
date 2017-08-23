@@ -10,36 +10,29 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
+import chat.libertaria.world.connect_chat.chat.welcome.MainActivity;
+import chat.libertaria.world.connect_chat.chat.welcome.SelectProfileFragment;
 
 /**
  * Created by Neoperol on 8/15/17.
  */
 
-public class ChangeProfile extends BaseActivity {
+public class ChangeProfileActivity extends BaseActivity {
     private static final int OPTIONS_SAVE = 1;
-    private Spinner spinner;
-    private TextView txt_no_profile;
-    private Button btn_open_app;
-    private RelativeLayout separator;
+
+    private SelectProfileFragment selectProfileFragment;
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
-        getLayoutInflater().inflate(R.layout.tutorial_slide2, container);
+        getLayoutInflater().inflate(R.layout.change_profile_main, container);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Change Profile");
-
-        btn_open_app = (Button) findViewById(R.id.btn_open_app);
-        btn_open_app.setVisibility(View.GONE);
-        txt_no_profile = (TextView) findViewById(R.id.no_profile);
-        txt_no_profile.setVisibility(View.GONE);
-        separator = (RelativeLayout) findViewById(R.id.separator);
-        separator.setVisibility(View.GONE);
-
-
+        selectProfileFragment = (SelectProfileFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_select_profiles);
     }
 
     @Override
@@ -54,8 +47,23 @@ public class ChangeProfile extends BaseActivity {
         int id = item.getItemId();
         if (id == OPTIONS_SAVE){
             //Save
+            if(checkSelectedProfile()){
+                onBackPressed();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean checkSelectedProfile() {
+        // try to get the profile
+        String profPubKey = selectProfileFragment.getSelectedProfileKey();
+        if (profPubKey!=null){
+            app.setSelectedProfile(profPubKey);
+            return true;
+        }else {
+            Toast.makeText(this, "Please choose a profile to continue", Toast.LENGTH_LONG).show();
+            return false;
+        }
     }
 }

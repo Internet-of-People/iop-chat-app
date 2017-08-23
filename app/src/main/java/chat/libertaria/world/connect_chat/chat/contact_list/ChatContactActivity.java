@@ -1,8 +1,6 @@
 package chat.libertaria.world.connect_chat.chat.contact_list;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -26,7 +23,7 @@ import java.util.List;
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
 import chat.libertaria.world.connect_chat.base.OpenConnectUtil;
-import chat.libertaria.world.connect_chat.chat.settings.ChangeProfile;
+import chat.libertaria.world.connect_chat.chat.settings.ChangeProfileActivity;
 
 /**
  * Created by Neoperol on 7/3/17.
@@ -119,7 +116,7 @@ public class ChatContactActivity extends BaseActivity {
                 break;
             case OPTION_CHANGE_PROFILE:
                 // Open settings
-                Intent myIntent = new Intent(this, ChangeProfile.class);
+                Intent myIntent = new Intent(this, ChangeProfileActivity.class);
                 startActivity(myIntent);
                 return true;
         }

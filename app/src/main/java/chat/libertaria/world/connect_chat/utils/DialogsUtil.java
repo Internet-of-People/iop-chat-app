@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
 import chat.libertaria.world.connect_chat.R;
+import chat.libertaria.world.connect_chat.base.dialogs.SimpleDialog;
 import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
 import chat.libertaria.world.connect_chat.base.dialogs.SimpleTwoButtonsDialog;
 
@@ -24,6 +25,16 @@ public class DialogsUtil {
         dialog.setRootBackgroundRes(R.drawable.dialog_bg);
         return dialog;
     }
+    public static SimpleDialog buildSimpleTextDialog2(Context context, String title, String body){
+        final SimpleDialog dialog = SimpleDialog.newInstance(context);
+        dialog.setTitle(title);
+        dialog.setBody(body);
+        dialog.setOkBtnBackgroundColor(context.getResources().getColor(R.color.mainPurple,null));
+        dialog.setOkBtnTextColor(Color.WHITE);
+        dialog.setRootBackgroundRes(R.drawable.dialog_bg);
+        return dialog;
+    }
+
 
     public static SimpleTwoButtonsDialog buildSimpleTwoBtnsDialog(Context context, int titleRes, int bodyRes, SimpleTwoButtonsDialog.SimpleTwoBtnsDialogListener simpleTwoBtnsDialogListener){
         return buildSimpleTwoBtnsDialog(context,context.getString(titleRes),context.getString(bodyRes),simpleTwoBtnsDialogListener);
