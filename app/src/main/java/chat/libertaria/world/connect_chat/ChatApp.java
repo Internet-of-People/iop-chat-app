@@ -80,22 +80,25 @@ public class ChatApp extends ConnectApp{
 
     @Override
     protected void onConnectClientServiceBind() {
+        //super.onConnectClientServiceBind();
         Log.i("ChatApp","onConnectClientServiceBind");
 
-        try {
-            // check if the profile is the same that we have saved here or the user have to select one of the list.
-            ProfileInformation selectedProfile = getProfilesModule().getProfile(appConf.getSelectedProfPubKey());
-            if (selectedProfile == null) {
-                existProfile.set(false);
-            }else {
-                existProfile.set(true);
+        if (isClientServiceBound() && isConnectedToPlatform()) {
+            try {
+                // check if the profile is the same that we have saved here or the user have to select one of the list.
+                ProfileInformation selectedProfile = getProfilesModule().getProfile(appConf.getSelectedProfPubKey());
+                if (selectedProfile == null) {
+                    existProfile.set(false);
+                } else {
+                    existProfile.set(true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
-        Intent intent = new Intent(INTENT_SERVICE_CONNECTED);
-        broadcastManager.sendBroadcast(intent);
+            Intent intent = new Intent(INTENT_SERVICE_CONNECTED);
+            broadcastManager.sendBroadcast(intent);
+        }
     }
 
     @Override

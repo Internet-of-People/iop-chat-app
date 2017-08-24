@@ -156,6 +156,8 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                                 errorDialog.setListener(new DialogListener() {
                                                     @Override
                                                     public void cancel(boolean isActionCompleted) {
+                                                        if (WaitingChatActivity.this.isDestroyed() || !WaitingChatActivity.this.isFinishing())
+                                                            return;
                                                         onBackPressed();
                                                     }
                                                 });
