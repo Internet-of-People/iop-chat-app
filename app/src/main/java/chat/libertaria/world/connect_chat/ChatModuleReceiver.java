@@ -164,7 +164,7 @@ public class ChatModuleReceiver extends ConnectReceiver {
     public void onChatDisconnected(String remotePk, String reason) {
         log.info("on chat disconnected: " + remotePk);
         ChatApp app = ChatApp.getInstance();
-        Intent intent = new Intent();
+        Intent intent = new Intent(ACTION_ON_CHAT_DISCONNECTED);
         intent.putExtra(REMOTE_PROFILE_PUB_KEY,remotePk);
         intent.putExtra(EXTRA_INTENT_DETAIL,reason);
         app.getBroadcastManager().sendBroadcast(intent);
