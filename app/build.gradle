@@ -40,6 +40,7 @@ dependencies {
     compile(name:'connect_sdk_android_shared_library-release',ext:'aar')
     compile(name:'furszy_ui_lib-release',ext:'aar')
     compile project(':connect_client')
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     testCompile 'junit:junit:4.12'
