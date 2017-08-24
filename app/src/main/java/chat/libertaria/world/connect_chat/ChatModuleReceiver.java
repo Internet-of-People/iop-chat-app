@@ -114,6 +114,7 @@ public class ChatModuleReceiver extends ConnectReceiver {
             }
         }catch (Exception e){
             e.printStackTrace();
+            log.info("Exception "+e.getMessage());
         }
     }
 
