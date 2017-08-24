@@ -276,39 +276,40 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
         localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ChatApp.INTENT_CHAT_ACCEPTED_BROADCAST));
         localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ChatApp.INTENT_CHAT_REFUSED_BROADCAST));
         localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ACTION_ON_CHAT_DISCONNECTED));
-        /*if (executors==null)
-            executors = Executors.newSingleThreadExecutor();
-        executors.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (selectedProfPubKey!=null && remotePk!=null) {
-                        if (!chatModule.isChatActive(selectedProfPubKey, remotePk)) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
-                                    onBackPressed();
-                                }
-                            });
+        if (!isCalling) {
+            if (executors == null)
+                executors = Executors.newSingleThreadExecutor();
+            executors.submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (selectedProfPubKey != null && remotePk != null) {
+                            if (!chatModule.isChatActive(selectedProfPubKey, remotePk)) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
+                                        onBackPressed();
+                                    }
+                                });
 
-                        }
-                    }else
-                        Log.e("WaitingChat","profile pub key is null");
-                }catch (Exception e){
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
-                            onBackPressed();
-                        }
-                    });
+                            }
+                        } else
+                            Log.e("WaitingChat", "profile pub key is null");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
+                                onBackPressed();
+                            }
+                        });
 
+                    }
                 }
-            }
-        });*/
-
+            });
+        }
         profileInformation = profilesModule.getKnownProfile(selectedProfPubKey,remotePk);
         txt_name.setText(profileInformation.getName());
         if (profileInformation.getImg()!=null){
@@ -345,6 +346,9 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
             acceptChatRequest();
         }else if (id == R.id.btn_cancel_chat || id == R.id.btn_cancel_chat_alone){
             // here i have to close the connection refusing the call..
+            if (executors==null){
+                executors = Executors.newSingleThreadExecutor();
+            }
             executors.submit(new Runnable() {
                 @Override
                 public void run() {

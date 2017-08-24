@@ -28,7 +28,19 @@
         </activity>
         <activity android:name=".chat.WaitingChatActivity"/>
         <activity android:name=".chat.ChatActivity"/>
-        <activity android:name=".chat.settings.ChangeProfile"/>
+        <activity android:name=".chat.settings.ChangeProfileActivity"/>
+
+        <receiver android:name="ChatModuleReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.furszy.broadcast.on_chat_connected"></action>
+                <action android:name="org.furszy.broadcast.on_chat_disconnected"></action>
+                <action android:name="org.furszy.broadcast.on_chat_msg_received"></action>
+                <action android:name="world.libertaria.broadcast.OPEN_CHAT_APP"></action>
+
+
+            </intent-filter>
+        </receiver>
 
 
     </application>

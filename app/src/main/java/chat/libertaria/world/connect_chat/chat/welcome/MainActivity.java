@@ -88,8 +88,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             viewPager.setCurrentItem(current);
         } else {
             // save profile and init app
-            app.getAppConf().setAppInit();
-            launchHomeScreen();
+            if(checkSelectedProfile()) {
+                app.getAppConf().setAppInit();
+                launchHomeScreen();
+            }
         }
     }
 
@@ -106,19 +108,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     btnNext.setText(getString(R.string.select_profile));
                     txt_title.setText(getString(R.string.select_profile_title));
                 } else {
-                    if (app.getSelectedProfilePubKey() == null) {
-                        // try to get the profile
-                        String profPubKey = ((SelectProfileFragment) viewPagerAdapter.getItem(1)).getSelectedProfileKey();
-                        if (profPubKey!=null){
-                            app.setSelectedProfile(profPubKey);
-                        }else {
-                            viewPager.setCurrentItem(1);
-                            Toast.makeText(MainActivity.this, "Please choose a profile to continue", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-                    btnNext.setText(getString(R.string.start));
-                    txt_title.setText(getString(R.string.start_chatting));
+                    if(checkSelectedProfile()) {
+                        btnNext.setText(getString(R.string.start));
+                        txt_title.setText(getString(R.string.start_chatting));
+                    }else
+                        return;
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -136,7 +130,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
-
+    private boolean checkSelectedProfile() {
+        if (app.getSelectedProfilePubKey() == null) {
+            // try to get the profile
+            String profPubKey = ((SelectProfileFragment) viewPagerAdapter.getItem(1)).getSelectedProfileKey();
+            if (profPubKey!=null){
+                app.setSelectedProfile(profPubKey);
+                return true;
+            }else {
+                viewPager.setCurrentItem(1);
+                Toast.makeText(MainActivity.this, "Please choose a profile to continue", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }else {
+            return true;
+        }
+    }
 
 
     private int getItem(int i) {

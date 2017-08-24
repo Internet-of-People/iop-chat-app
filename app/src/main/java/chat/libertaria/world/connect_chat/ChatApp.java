@@ -1,19 +1,27 @@
 package chat.libertaria.world.connect_chat;
 
 
-import android.app.Application;
 import android.app.NotificationManager;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
-import org.libertaria.world.services.EnabledServices;
-import org.libertaria.world.services.chat.ChatModule;
-import org.libertaria.world.services.interfaces.PairingModule;
-import org.libertaria.world.services.interfaces.ProfilesModule;
+import com.snappydb.SnappydbException;
 
+import org.libertaria.world.profile_server.ProfileInformation;
+
+import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import chat.libertaria.world.connect_chat.base.BaseActivity;
+import chat.libertaria.world.connect_chat.base.dialogs.DialogListener;
+import chat.libertaria.world.connect_chat.base.dialogs.SimpleDialog;
+import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
+import chat.libertaria.world.connect_chat.chat.settings.ChangeProfileActivity;
+import chat.libertaria.world.connect_chat.chat.store.RemoteProfilesStore;
+import chat.libertaria.world.connect_chat.utils.DialogsUtil;
 import world.libertaria.sdk.android.client.ConnectApp;
-import world.libertaria.shared.library.services.chat.ChatIntentsConstants;
 
 /**
  * Created by furszy on 8/2/17.
@@ -22,6 +30,7 @@ import world.libertaria.shared.library.services.chat.ChatIntentsConstants;
 public class ChatApp extends ConnectApp{
 
     public static final String INTENT_SERVICE_CONNECTED = "service_connected";
+    public static final String INTENT_PROFILE_NOT_EXIST_ON_THE_PLATFORM = "profile_not_exist_on_the_platform";
 
     public static final String INTENT_ACTION_PROFILE_CONNECTED = "profile_connected";
     public static final String INTENT_ACTION_PROFILE_CHECK_IN_FAIL= "profile_check_in_fail";
@@ -35,16 +44,17 @@ public class ChatApp extends ConnectApp{
     public static final String INTENT_CHAT_TEXT_RECEIVED = "text";
 
     /** Preferences */
-    private static final String PREFS_NAME = "app_prefs";
+    public static final String PREFS_NAME = "app_prefs";
 
     private NotificationManager notificationManager;
+    private RemoteProfilesStore remoteProfilesStore;
 
     private static volatile ChatApp instance;
 
     /** Pub key of the selected profile */
     private String selectedProfilePubKey;
     private AppConf appConf;
-    private ChatModuleReceiver chatModuleReceiver = new ChatModuleReceiver();
+    private AtomicBoolean existProfile = new AtomicBoolean(true);
 
     public static ChatApp getInstance(){
         return instance;
@@ -56,16 +66,34 @@ public class ChatApp extends ConnectApp{
         instance = this;
         appConf = new AppConf(getSharedPreferences(PREFS_NAME, 0));
         selectedProfilePubKey = appConf.getSelectedProfPubKey();
-
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        try {
+            remoteProfilesStore = new RemoteProfilesStore(getDirPrivateMode("remotes_profiles_store").getAbsolutePath());
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+    }
 
-        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_CONNECTED));
-        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_DISCONNECTED));
-        registerReceiver(chatModuleReceiver,new IntentFilter(ChatIntentsConstants.ACTION_ON_CHAT_MSG_RECEIVED));
+    public File getDirPrivateMode(String name) {
+        return getDir(name,MODE_PRIVATE);
     }
 
     @Override
     protected void onConnectClientServiceBind() {
+        Log.i("ChatApp","onConnectClientServiceBind");
+
+        try {
+            // check if the profile is the same that we have saved here or the user have to select one of the list.
+            ProfileInformation selectedProfile = getProfilesModule().getProfile(appConf.getSelectedProfPubKey());
+            if (selectedProfile == null) {
+                existProfile.set(false);
+            }else {
+                existProfile.set(true);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         Intent intent = new Intent(INTENT_SERVICE_CONNECTED);
         broadcastManager.sendBroadcast(intent);
     }
@@ -93,11 +121,23 @@ public class ChatApp extends ConnectApp{
     }
 
     public void setSelectedProfile(String selectedProfile) {
+        // check if profile exists
+        if(getProfilesModule().getProfile(selectedProfile)!=null){
+            existProfile.set(true);
+        }
         this.selectedProfilePubKey = selectedProfile;
         appConf.setSelectedProfPubKey(selectedProfile);
     }
 
     public AppConf getAppConf() {
         return appConf;
+    }
+
+    public RemoteProfilesStore getRemoteProfilesStore() {
+        return remoteProfilesStore;
+    }
+
+    public boolean getExistProfile() {
+        return existProfile.get();
     }
 }
