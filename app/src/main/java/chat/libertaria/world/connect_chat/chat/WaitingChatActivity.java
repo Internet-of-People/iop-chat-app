@@ -35,6 +35,7 @@ import chat.libertaria.world.connect_chat.base.dialogs.DialogListener;
 import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
 import chat.libertaria.world.connect_chat.utils.DialogsUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
+import pl.droidsonroids.gif.GifImageView;
 
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_CHAT_REFUSED_BROADCAST;
 import static world.libertaria.shared.library.services.chat.ChatIntentsConstants.ACTION_ON_CHAT_DISCONNECTED;
@@ -52,6 +53,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
     /** Call timeout in minutes */
     private static final long CALL_TIMEOUT = 1;
     private SimpleTextDialog errorDialog;
+    private GifImageView loadingAnimation;
     private View root;
     private TextView txt_name;
     private CircleImageView img_profile;
@@ -108,6 +110,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
             // prepare timer..
             scheduleCallTimeout();
         }else {
+            root.findViewById(R.id.loading_animation).setVisibility(View.GONE);
             root.findViewById(R.id.single_cancel_container).setVisibility(View.GONE);
             root.findViewById(R.id.btn_open_chat).setOnClickListener(this);
             root.findViewById(R.id.btn_cancel_chat).setOnClickListener(this);
