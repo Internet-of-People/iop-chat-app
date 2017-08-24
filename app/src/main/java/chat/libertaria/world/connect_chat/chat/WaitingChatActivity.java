@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import chat.libertaria.world.connect_chat.ChatApp;
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
+import chat.libertaria.world.connect_chat.base.dialogs.DialogListener;
 import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
 import chat.libertaria.world.connect_chat.utils.DialogsUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -139,29 +140,29 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                 }
 
                                 @Override
-                                public void onFail(int messageId, int status, String statusDetail) {
+                                public void onFail(int messageId, final int status, final String statusDetail) {
                                     Log.e("APP", "fail chat request: " + statusDetail + ", id: " + messageId);
                                     flag.set(false);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
+                                            if (errorDialog==null) {
+                                                errorDialog = DialogsUtil.buildSimpleTextDialog(
+                                                        WaitingChatActivity.this,
+                                                        getString(R.string.chat_request_fail_title),
+                                                        getString(R.string.chat_request_fail, statusDetail)
 
-                                            errorDialog = DialogsUtil.buildSimpleTextDialog(
-                                                    WaitingChatActivity.this,
-                                                    getString(R.string.chat_request_fail_title),
-                                                    getString(R.string.chat_request_fail)
-
-                                            );
-                                            errorDialog.show(getFragmentManager(),getResources().getString(R.string.chat_request_fail));
-
-                                            final Timer t = new Timer();
-                                            t.schedule(new TimerTask() {
-                                                public void run() {
-                                                    errorDialog.dismiss();
-                                                    t.cancel();
-                                                }
-                                            }, 4000);
-                                            onBackPressed();
+                                                );
+                                                errorDialog.setListener(new DialogListener() {
+                                                    @Override
+                                                    public void cancel(boolean isActionCompleted) {
+                                                        onBackPressed();
+                                                    }
+                                                });
+                                            }else {
+                                                errorDialog.setBody(getString(R.string.chat_request_fail, statusDetail));
+                                            }
+                                            errorDialog.show(getFragmentManager(),"chat_fail_dialog");
                                         }
                                     });
                                 }
@@ -273,54 +274,58 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ChatApp.INTENT_CHAT_ACCEPTED_BROADCAST));
-        localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ChatApp.INTENT_CHAT_REFUSED_BROADCAST));
-        localBroadcastManager.registerReceiver(chatReceiver,new IntentFilter(ACTION_ON_CHAT_DISCONNECTED));
-        if (!isCalling) {
-            if (executors == null)
-                executors = Executors.newSingleThreadExecutor();
-            executors.submit(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (selectedProfPubKey != null && remotePk != null) {
-                            if (!chatModule.isChatActive(selectedProfPubKey, remotePk)) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
-                                        onBackPressed();
-                                    }
-                                });
+        try {
+            localBroadcastManager.registerReceiver(chatReceiver, new IntentFilter(ChatApp.INTENT_CHAT_ACCEPTED_BROADCAST));
+            localBroadcastManager.registerReceiver(chatReceiver, new IntentFilter(ChatApp.INTENT_CHAT_REFUSED_BROADCAST));
+            localBroadcastManager.registerReceiver(chatReceiver, new IntentFilter(ACTION_ON_CHAT_DISCONNECTED));
+            if (!isCalling) {
+                if (executors == null)
+                    executors = Executors.newSingleThreadExecutor();
+                executors.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (selectedProfPubKey != null && remotePk != null) {
+                                if (!chatModule.isChatActive(selectedProfPubKey, remotePk)) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
+                                            onBackPressed();
+                                        }
+                                    });
 
-                            }
-                        } else
-                            Log.e("WaitingChat", "profile pub key is null");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
-                                onBackPressed();
-                            }
-                        });
+                                }
+                            } else
+                                Log.e("WaitingChat", "profile pub key is null");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(WaitingChatActivity.this, "Chat not active anymore", Toast.LENGTH_LONG).show();
+                                    onBackPressed();
+                                }
+                            });
 
+                        }
                     }
-                }
-            });
-        }
-        profileInformation = profilesModule.getKnownProfile(selectedProfPubKey,remotePk);
-        txt_name.setText(profileInformation.getName());
-        if (profileInformation.getImg()!=null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(profileInformation.getImg(),0,profileInformation.getImg().length);
-            img_profile.setImageBitmap(bitmap);
-        }
-        if(isCalling){
-            txt_title.setText("Waiting for "+profileInformation.getName()+" response...");
-            call();
-        }else {
-            txt_title.setText("Call from "+profileInformation.getName());
+                });
+            }
+            profileInformation = profilesModule.getKnownProfile(selectedProfPubKey, remotePk);
+            txt_name.setText(profileInformation.getName());
+            if (profileInformation.getImg() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(profileInformation.getImg(), 0, profileInformation.getImg().length);
+                img_profile.setImageBitmap(bitmap);
+            }
+            if (isCalling) {
+                txt_title.setText("Waiting for " + profileInformation.getName() + " response...");
+                call();
+            } else {
+                txt_title.setText("Call from " + profileInformation.getName());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

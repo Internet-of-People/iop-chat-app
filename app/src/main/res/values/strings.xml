@@ -19,7 +19,7 @@
     <string name="incoming_message">Wants to chat \n with you</string>
     <string name="chat_request_send">Your send request has been send</string>
     <string name="chat_request_fail_title">Chat request failed</string>
-    <string name="chat_request_fail">Your send request failed</string>
+    <string name="chat_request_fail">Chat request fail\n%s</string>
     <string name="add_contact">Add contact</string>
     <string name="settings">Settings</string>
     <string name="change_profile">Change Profile</string>
