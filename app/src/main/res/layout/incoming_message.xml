@@ -15,9 +15,10 @@
         android:layout_alignParentTop="true">
 
         <pl.droidsonroids.gif.GifImageView
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ani_wait"
+            android:id="@+id/loading_animation"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/loading_circles"
             android:layout_marginBottom="10dp"
             />
 
