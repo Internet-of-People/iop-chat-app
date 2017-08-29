@@ -114,6 +114,7 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
             root.findViewById(R.id.single_cancel_container).setVisibility(View.GONE);
             root.findViewById(R.id.btn_open_chat).setOnClickListener(this);
             root.findViewById(R.id.btn_cancel_chat).setOnClickListener(this);
+            //root.findViewById(R.id.user_image).setVisibility(View.GONE);
         }
     }
 
@@ -149,25 +150,27 @@ public class WaitingChatActivity extends BaseActivity implements View.OnClickLis
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (errorDialog==null) {
-                                                errorDialog = DialogsUtil.buildSimpleTextDialog(
-                                                        WaitingChatActivity.this,
-                                                        getString(R.string.chat_request_fail_title),
-                                                        getString(R.string.chat_request_fail, statusDetail)
+                                            if (!isDestroyed()) {
+                                                if (errorDialog == null) {
+                                                    errorDialog = DialogsUtil.buildSimpleTextDialog(
+                                                            WaitingChatActivity.this,
+                                                            getString(R.string.chat_request_fail_title),
+                                                            getString(R.string.chat_request_fail, statusDetail)
 
-                                                );
-                                                errorDialog.setListener(new DialogListener() {
-                                                    @Override
-                                                    public void cancel(boolean isActionCompleted) {
-                                                        if (WaitingChatActivity.this.isDestroyed() || !WaitingChatActivity.this.isFinishing())
-                                                            return;
-                                                        onBackPressed();
-                                                    }
-                                                });
-                                            }else {
-                                                errorDialog.setBody(getString(R.string.chat_request_fail, statusDetail));
+                                                    );
+                                                    errorDialog.setListener(new DialogListener() {
+                                                        @Override
+                                                        public void cancel(boolean isActionCompleted) {
+                                                            if (WaitingChatActivity.this.isDestroyed() || !WaitingChatActivity.this.isFinishing())
+                                                                return;
+                                                            onBackPressed();
+                                                        }
+                                                    });
+                                                } else {
+                                                    errorDialog.setBody(getString(R.string.chat_request_fail, statusDetail));
+                                                }
+                                                errorDialog.show(getFragmentManager(), "chat_fail_dialog");
                                             }
-                                            errorDialog.show(getFragmentManager(),"chat_fail_dialog");
                                         }
                                     });
                                 }
