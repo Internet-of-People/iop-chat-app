@@ -134,6 +134,7 @@ public class ChatModuleReceiver extends ConnectReceiver {
         String selectedProfPk = appConf.getSelectedProfPubKey();
         remoteProflie = profilesModule.getKnownProfile(selectedProfPk, remoteProfilePubKey);
         if (remoteProflie != null) {
+            log.info("on chat connected with: "+remoteProflie.getName());
             Intent intent = new Intent(context, WaitingChatActivity.class);
             intent.putExtra(REMOTE_PROFILE_PUB_KEY, remoteProfilePubKey);
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);

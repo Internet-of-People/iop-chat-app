@@ -110,10 +110,12 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void loadBasics(){
         app = ChatApp.getInstance();
-        pairingModule = app.getPairingModule();
-        chatModule = app.getChatModule();
-        profilesModule = app.getProfilesModule();
-        selectedProfPubKey = app.getSelectedProfilePubKey();
+        if (app.isClientServiceBound()) {
+            pairingModule = app.getPairingModule();
+            chatModule = app.getChatModule();
+            profilesModule = app.getProfilesModule();
+            selectedProfPubKey = app.getSelectedProfilePubKey();
+        }
     }
 
     private void init(){

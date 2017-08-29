@@ -53,10 +53,12 @@ public abstract class BaseAppRecyclerFragment<T> extends RecyclerFragment<T> {
 
     public void loadBasics() {
         app = ChatApp.getInstance();
-        pairingModule = app.getPairingModule();
-        chatModule = app.getChatModule();
-        profilesModule = app.getProfilesModule();
-        selectedProfilePubKey = app.getSelectedProfilePubKey();
+        if (app.isClientServiceBound()) {
+            pairingModule = app.getPairingModule();
+            chatModule = app.getChatModule();
+            profilesModule = app.getProfilesModule();
+            selectedProfilePubKey = app.getSelectedProfilePubKey();
+        }
     }
 
     /**
