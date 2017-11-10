@@ -1,6 +1,5 @@
 package chat.libertaria.world.connect_chat.chat.welcome;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.libertaria.world.profile_server.ProfileInformation;
 
@@ -19,7 +17,6 @@ import java.util.List;
 
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseAppFragment;
-import chat.libertaria.world.connect_chat.base.BaseAppRecyclerFragment;
 import chat.libertaria.world.connect_chat.chat.contact_list.ProfileHolder;
 
 /**
@@ -37,7 +34,7 @@ public class SelectProfileFragment extends BaseAppFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.tutorial_slide2,container,false);
+        root = inflater.inflate(R.layout.tutorial_slide2, container, false);
         spinner = root.findViewById(R.id.spinner);
         btn_open_app = root.findViewById(R.id.btn_open_app);
         btn_open_app.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +44,7 @@ public class SelectProfileFragment extends BaseAppFragment {
             }
         });
 
-        adapter = new ArrayAdapter<ProfileInformation>(getActivity(),android.R.layout.simple_spinner_item){
+        adapter = new ArrayAdapter<ProfileInformation>(getActivity(), android.R.layout.simple_spinner_item) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -55,13 +52,12 @@ public class SelectProfileFragment extends BaseAppFragment {
                 View row = convertView;
                 ProfileHolder holder = null;
 
-                if(row == null) {
+                if (row == null) {
                     LayoutInflater inflater = getActivity().getLayoutInflater();
                     row = inflater.inflate(R.layout.my_contacts_row, parent, false);
-                    holder = new ProfileHolder(row,position);
+                    holder = new ProfileHolder(row, position);
                     row.setTag(holder);
-                }
-                else {
+                } else {
                     holder = (ProfileHolder) row.getTag();
                 }
 
@@ -77,13 +73,12 @@ public class SelectProfileFragment extends BaseAppFragment {
                 View row = convertView;
                 ProfileHolder holder = null;
 
-                if(row == null) {
+                if (row == null) {
                     LayoutInflater inflater = getActivity().getLayoutInflater();
                     row = inflater.inflate(R.layout.my_contacts_row, parent, false);
-                    holder = new ProfileHolder(row,position);
+                    holder = new ProfileHolder(row, position);
                     row.setTag(holder);
-                }
-                else {
+                } else {
                     holder = (ProfileHolder) row.getTag();
                 }
 
@@ -102,7 +97,7 @@ public class SelectProfileFragment extends BaseAppFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (profilesModule!=null) {
+        if (profilesModule != null) {
             load();
         }
     }
@@ -116,11 +111,16 @@ public class SelectProfileFragment extends BaseAppFragment {
     private void load() {
         list = profilesModule.getLocalProfiles();
         adapter.clear();
+        adapter.clear();
         adapter.addAll(list);
         adapter.notifyDataSetChanged();
     }
 
     public String getSelectedProfileKey() {
-        return ((ProfileInformation) spinner.getSelectedItem()).getHexPublicKey();
+        if (spinner.getSelectedItem() != null) {
+            return ((ProfileInformation) spinner.getSelectedItem()).getHexPublicKey();
+        } else {
+            return null;
+        }
     }
 }
