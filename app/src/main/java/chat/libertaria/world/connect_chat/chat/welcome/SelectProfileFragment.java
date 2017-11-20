@@ -111,7 +111,6 @@ public class SelectProfileFragment extends BaseAppFragment {
     private void load() {
         list = profilesModule.getLocalProfiles();
         adapter.clear();
-        adapter.clear();
         adapter.addAll(list);
         adapter.notifyDataSetChanged();
     }
