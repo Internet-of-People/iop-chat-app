@@ -17,7 +17,7 @@ import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseAppRecyclerFragment;
 import chat.libertaria.world.connect_chat.chat.WaitingChatActivity;
 import tech.furszy.ui.lib.base.adapter.BaseAdapter;
-import tech.furszy.ui.lib.base.adapter.FermatListItemListeners;
+import tech.furszy.ui.lib.base.adapter.RecyclerListItemListeners;
 
 import static chat.libertaria.world.connect_chat.chat.WaitingChatActivity.REMOTE_PROFILE_PUB_KEY;
 
@@ -37,7 +37,7 @@ public class ContactsFragment extends BaseAppRecyclerFragment<ProfileInformation
 
     @Override
     protected BaseAdapter initAdapter() {
-        return new ProfileAdapter(getActivity(), new FermatListItemListeners<ProfileInformation>() {
+        return new ProfileAdapter(getActivity(), new RecyclerListItemListeners<ProfileInformation>() {
             @Override
             public void onItemClickListener(ProfileInformation data, int position) {
                 // todo: launch activity

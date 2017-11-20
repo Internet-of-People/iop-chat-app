@@ -13,7 +13,7 @@ import chat.libertaria.world.connect_chat.base.BaseAppRecyclerFragment;
 import chat.libertaria.world.connect_chat.chat.contact_list.ChatContactActivity;
 import tech.furszy.ui.lib.base.adapter.BaseAdapter;
 import tech.furszy.ui.lib.base.adapter.BaseViewHolder;
-import tech.furszy.ui.lib.base.adapter.FermatListItemListeners;
+import tech.furszy.ui.lib.base.adapter.RecyclerListItemListeners;
 
 /**
  * Created by furszy on 8/10/17.
@@ -23,7 +23,7 @@ public class LocalProfilesFragment extends BaseAppRecyclerFragment<ProfileInform
 
     @Override
     protected List<ProfileInformation> onLoading() {
-        if (profilesModule!=null)
+        if (profilesModule != null)
             return profilesModule.getLocalProfiles();
         return null;
     }
@@ -36,10 +36,10 @@ public class LocalProfilesFragment extends BaseAppRecyclerFragment<ProfileInform
 
     @Override
     protected BaseAdapter<ProfileInformation, ? extends ProfileHolder> initAdapter() {
-        BaseAdapter baseAdapter = new BaseAdapter<ProfileInformation, ProfileHolder>(getActivity()) {
+        BaseAdapter<ProfileInformation, ProfileHolder> baseAdapter = new BaseAdapter<ProfileInformation, ProfileHolder>(getActivity()) {
             @Override
             protected ProfileHolder createHolder(View view, int type) {
-                return new ProfileHolder(view,type);
+                return new ProfileHolder(view, type);
             }
 
             @Override
@@ -52,7 +52,7 @@ public class LocalProfilesFragment extends BaseAppRecyclerFragment<ProfileInform
                 profileHolder.txt_name.setText(profileInformation.getName());
             }
         };
-        baseAdapter.setFermatListEventListener(new FermatListItemListeners<ProfileInformation>() {
+        baseAdapter.setListEventListener(new RecyclerListItemListeners<ProfileInformation>() {
             @Override
             public void onItemClickListener(ProfileInformation o, int i) {
                 app.setSelectedProfile(o.getHexPublicKey());
@@ -67,7 +67,7 @@ public class LocalProfilesFragment extends BaseAppRecyclerFragment<ProfileInform
         return baseAdapter;
     }
 
-    private class ProfileHolder extends BaseViewHolder{
+    private class ProfileHolder extends BaseViewHolder {
 
         TextView txt_name;
 
