@@ -42,6 +42,7 @@ import static chat.libertaria.world.connect_chat.ChatApp.INTENT_ACTION_PROFILE_D
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_EXTRA_ERROR_DETAIL;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_PROFILE_NOT_EXIST_ON_THE_PLATFORM;
 import static chat.libertaria.world.connect_chat.ChatApp.INTENT_SERVICE_CONNECTED;
+import static chat.libertaria.world.connect_chat.ChatApp.INTENT_SERVICE_DISCONNECTED;
 
 /**
  * Created by furszy on 6/5/17.
@@ -70,9 +71,25 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(INTENT_SERVICE_CONNECTED)){
-                loadBasics();
-                onServiceConnected();
+            if (action == null) {
+                return;
+            }
+            switch (action) {
+                case INTENT_SERVICE_CONNECTED:
+                    loadBasics();
+                    onServiceConnected();
+                    btnReload = (LinearLayout) findViewById(R.id.btnReload);
+                    if (btnReload != null) {
+                        btnReload.setVisibility(LinearLayout.GONE);
+                    }
+                    break;
+                case INTENT_SERVICE_DISCONNECTED:
+                    onServiceDisconnected();
+                    btnReload = (LinearLayout) findViewById(R.id.btnReload);
+                    if (btnReload != null) {
+                        btnReload.setVisibility(LinearLayout.VISIBLE);
+                    }
+                    break;
             }
         }
     };
@@ -101,14 +118,15 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
 
-            localBroadcastManager.registerReceiver(appReceiver,new IntentFilter(INTENT_SERVICE_CONNECTED));
+            localBroadcastManager.registerReceiver(appReceiver, new IntentFilter(INTENT_SERVICE_CONNECTED));
+            localBroadcastManager.registerReceiver(appReceiver, new IntentFilter(INTENT_SERVICE_DISCONNECTED));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    protected void loadBasics(){
+    protected void loadBasics() {
         app = ChatApp.getInstance();
         if (app.isClientServiceBound()) {
             pairingModule = app.getPairingModule();
@@ -118,7 +136,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void init(){
+    private void init() {
         childContainer = (FrameLayout) findViewById(R.id.content);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -136,7 +154,7 @@ public class BaseActivity extends AppCompatActivity {
      *
      * @param savedInstanceState
      */
-    protected void onCreateView(Bundle savedInstanceState, ViewGroup container){
+    protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
 
     }
 
@@ -146,10 +164,11 @@ public class BaseActivity extends AppCompatActivity {
         loadBasics();
         localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(NOTIF_DIALOG_EVENT));
         localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_DISCONNECTED));
-        localBroadcastManager.registerReceiver(notifReceiver,new IntentFilter(INTENT_ACTION_PROFILE_CHECK_IN_FAIL));
-        localBroadcastManager.registerReceiver(notifReceiver,new IntentFilter(INTENT_ACTION_PROFILE_CONNECTED));
+        localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_CHECK_IN_FAIL));
+        localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_CONNECTED));
+        localBroadcastManager.registerReceiver(appReceiver, new IntentFilter(INTENT_SERVICE_DISCONNECTED));
 
-        if(!app.getExistProfile() && !(this instanceof ChangeProfileActivity) && !(this instanceof MainActivity)){
+        if (!app.getExistProfile() && !(this instanceof ChangeProfileActivity) && !(this instanceof MainActivity)) {
             SimpleDialog simpleTextDialog = DialogsUtil.buildSimpleTextDialog2(
                     this,
                     "Initialization",
@@ -165,7 +184,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void launchSelectProfile(){
+    private void launchSelectProfile() {
         Intent intent = new Intent(this, ChangeProfileActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -176,7 +195,7 @@ public class BaseActivity extends AppCompatActivity {
         try {
             super.onStop();
             localBroadcastManager.unregisterReceiver(notifReceiver);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -188,44 +207,48 @@ public class BaseActivity extends AppCompatActivity {
         localBroadcastManager.unregisterReceiver(appReceiver);
     }
 
-    private class NotifReceiver extends BroadcastReceiver{
+    private class NotifReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i("BaseActivity","onReceive");
+            Log.i("BaseActivity", "onReceive");
             String action = intent.getAction();
-            if (action.equals(INTENT_ACTION_PROFILE_CONNECTED)){
+            if (action.equals(INTENT_ACTION_PROFILE_CONNECTED)) {
                 hideConnectionLoose();
-            }else if (action.equals(INTENT_ACTION_PROFILE_DISCONNECTED)){
+            } else if (action.equals(INTENT_ACTION_PROFILE_DISCONNECTED)) {
                 showConnectionLoose();
-            }else if(action.equals(INTENT_ACTION_PROFILE_CHECK_IN_FAIL)){
+            } else if (action.equals(INTENT_ACTION_PROFILE_CHECK_IN_FAIL)) {
                 // todo: here i should add some error handling and use the "detail" field...
                 String detail = intent.getStringExtra(INTENT_EXTRA_ERROR_DETAIL);
-                Log.e("BaseActivity","check in fail: "+detail);
-                Toast.makeText(BaseActivity.this,"Check in fail, "+detail,Toast.LENGTH_LONG).show();
+                Log.e("BaseActivity", "check in fail: " + detail);
+                Toast.makeText(BaseActivity.this, "Check in fail, " + detail, Toast.LENGTH_LONG).show();
                 showConnectionLoose();
             }
         }
     }
 
     protected boolean checkPermission(String permission) {
-        int result = ContextCompat.checkSelfPermission(getApplicationContext(),permission);
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(), permission);
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
 
-    public void hideConnectionLoose(){
+    public void hideConnectionLoose() {
         btnReload.setVisibility(View.GONE);
     }
 
-    public void showConnectionLoose(){
+    public void showConnectionLoose() {
         btnReload.setVisibility(View.VISIBLE);
     }
 
     /**
      * Method to override
      */
-    protected void onServiceConnected(){
+    protected void onServiceConnected() {
+
+    }
+
+    protected void onServiceDisconnected() {
 
     }
 

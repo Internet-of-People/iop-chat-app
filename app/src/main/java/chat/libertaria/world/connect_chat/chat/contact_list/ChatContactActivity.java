@@ -38,6 +38,7 @@ public class ChatContactActivity extends BaseActivity {
 
     private View root;
     private ViewPager viewPager;
+    private Menu menu;
 
     private boolean showMenu;
 
@@ -94,6 +95,7 @@ public class ChatContactActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        this.menu = menu;
         MenuItem menuAdd = menu.add(DEFAULT_GROUP, OPTION_ADD_CONTACT, Menu.NONE, R.string.add_contact).setIcon(R.drawable.ic_add_acontact);
         menuAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         MenuItem menuMyProfile = menu.add(DEFAULT_GROUP, OPTION_SELECTED_PROFILE, Menu.NONE, R.string.my_profile);
@@ -121,5 +123,23 @@ public class ChatContactActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onServiceConnected() {
+        super.onServiceConnected();
+        menuVisible(true);
+    }
+
+    @Override
+    protected void onServiceDisconnected() {
+        super.onServiceDisconnected();
+        menuVisible(false);
+    }
+
+    private void menuVisible(boolean visible) {
+        if (menu != null) {
+            menu.setGroupVisible(DEFAULT_GROUP, visible);
+        }
     }
 }

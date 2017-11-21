@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import world.libertaria.shared.library.contacts.ContactsAppIntents;
+
 /**
  * Created by furszy on 8/13/17.
  */
@@ -50,15 +52,18 @@ public class OpenConnectUtil {
     }
 
     public static void launchContacts(Context context) {
-        String packageName = "org.furszy";
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        if (intent != null) {
-            // We found the activity now start the activity
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        } else {
-            Toast.makeText(context, "Not supported operation", Toast.LENGTH_LONG).show();
-        }
+
+        Intent intent = new Intent("world.libertaria.profiles.MY_PROFILE");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+//        Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+//        if (intent != null) {
+//            // We found the activity now start the activity
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            context.startActivity(intent);
+//        } else {
+//            Toast.makeText(context, "Not supported operation", Toast.LENGTH_LONG).show();
+//        }
 
 //        Intent intent = new Intent(ContactsAppIntents.ACTION_OPEN_ACTIVITY);
 //        intent.setPackage(packageName);

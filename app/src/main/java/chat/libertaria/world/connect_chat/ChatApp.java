@@ -24,6 +24,7 @@ import world.libertaria.sdk.android.client.ConnectClientService;
 public class ChatApp extends ConnectApp {
 
     public static final String INTENT_SERVICE_CONNECTED = "service_connected";
+    public static final String INTENT_SERVICE_DISCONNECTED = "service_disconnected";
     public static final String INTENT_PROFILE_NOT_EXIST_ON_THE_PLATFORM = "profile_not_exist_on_the_platform";
 
     public static final String INTENT_ACTION_PROFILE_CONNECTED = "profile_connected";
@@ -102,6 +103,8 @@ public class ChatApp extends ConnectApp {
     @Override
     protected void onConnectClientServiceUnbind() {
         super.onConnectClientServiceUnbind();
+        Intent intent = new Intent(INTENT_SERVICE_DISCONNECTED);
+        broadcastManager.sendBroadcast(intent);
     }
 
 
