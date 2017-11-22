@@ -34,6 +34,7 @@ public class SelectProfileFragment extends BaseAppFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         root = inflater.inflate(R.layout.tutorial_slide2, container, false);
         spinner = root.findViewById(R.id.spinner);
         btn_open_app = root.findViewById(R.id.btn_open_app);
@@ -91,15 +92,14 @@ public class SelectProfileFragment extends BaseAppFragment {
         };
         adapter.setDropDownViewResource(R.layout.my_contacts_row);
         spinner.setAdapter(adapter);
+        load();
         return root;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (profilesModule != null) {
-            load();
-        }
+        load();
     }
 
     @Override
@@ -109,10 +109,13 @@ public class SelectProfileFragment extends BaseAppFragment {
     }
 
     private void load() {
+        loadBasics();
         list = profilesModule.getLocalProfiles();
         adapter.clear();
-        adapter.addAll(list);
-        adapter.notifyDataSetChanged();
+        if (list != null) {
+            adapter.addAll(list);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public String getSelectedProfileKey() {

@@ -44,6 +44,7 @@ public class ChatContactActivity extends BaseActivity {
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
+        super.onCreateView(savedInstanceState, container);
         root = getLayoutInflater().inflate(R.layout.chat_contacts_activity, container);
         setTitle("Contact chat");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2053A1")));
@@ -128,13 +129,11 @@ public class ChatContactActivity extends BaseActivity {
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-        menuVisible(true);
     }
 
     @Override
     protected void onServiceDisconnected() {
         super.onServiceDisconnected();
-        menuVisible(false);
     }
 
     private void menuVisible(boolean visible) {

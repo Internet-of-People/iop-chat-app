@@ -70,6 +70,7 @@ public class BaseActivity extends AppCompatActivity {
     private BroadcastReceiver appReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            System.out.println("Intent received!" + intent);
             String action = intent.getAction();
             if (action == null) {
                 return;
@@ -78,17 +79,9 @@ public class BaseActivity extends AppCompatActivity {
                 case INTENT_SERVICE_CONNECTED:
                     loadBasics();
                     onServiceConnected();
-                    btnReload = (LinearLayout) findViewById(R.id.btnReload);
-                    if (btnReload != null) {
-                        btnReload.setVisibility(LinearLayout.GONE);
-                    }
                     break;
                 case INTENT_SERVICE_DISCONNECTED:
                     onServiceDisconnected();
-                    btnReload = (LinearLayout) findViewById(R.id.btnReload);
-                    if (btnReload != null) {
-                        btnReload.setVisibility(LinearLayout.VISIBLE);
-                    }
                     break;
             }
         }
@@ -166,22 +159,8 @@ public class BaseActivity extends AppCompatActivity {
         localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_DISCONNECTED));
         localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_CHECK_IN_FAIL));
         localBroadcastManager.registerReceiver(notifReceiver, new IntentFilter(INTENT_ACTION_PROFILE_CONNECTED));
+        localBroadcastManager.registerReceiver(appReceiver, new IntentFilter(INTENT_SERVICE_CONNECTED));
         localBroadcastManager.registerReceiver(appReceiver, new IntentFilter(INTENT_SERVICE_DISCONNECTED));
-
-        if (!app.getExistProfile() && !(this instanceof ChangeProfileActivity) && !(this instanceof MainActivity)) {
-            SimpleDialog simpleTextDialog = DialogsUtil.buildSimpleTextDialog2(
-                    this,
-                    "Initialization",
-                    "Selected profile doesn't exist on the platform\n\nPlease select another one"
-            );
-            simpleTextDialog.setListener(new DialogListener() {
-                @Override
-                public void cancel(boolean isActionCompleted) {
-                    launchSelectProfile();
-                }
-            });
-            simpleTextDialog.show();
-        }
     }
 
     private void launchSelectProfile() {
@@ -203,7 +182,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         localBroadcastManager.unregisterReceiver(appReceiver);
     }
 
