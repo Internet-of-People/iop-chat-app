@@ -20,11 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".chat.contact_list.ChatContactActivity" />
+        <activity android:name=".chat.contact_list.ChatContactActivity">
+            <intent-filter>
+                <action android:name="chat.libertaria.world.connect_chat.chat.contact_list.CONTACTS"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".chat.welcome.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
         <activity android:name=".chat.WaitingChatActivity" />
         <activity android:name=".chat.ChatActivity" />
         <activity android:name=".chat.settings.ChangeProfileActivity" />

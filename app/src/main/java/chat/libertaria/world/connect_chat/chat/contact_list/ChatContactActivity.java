@@ -21,8 +21,8 @@ import java.util.List;
 
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
-import chat.libertaria.world.connect_chat.base.OpenConnectUtil;
 import chat.libertaria.world.connect_chat.chat.settings.ChangeProfileActivity;
+import world.libertaria.shared.library.util.OpenApplicationsUtil;
 
 /**
  * Created by Neoperol on 7/3/17.
@@ -112,10 +112,10 @@ public class ChatContactActivity extends BaseActivity {
         switch (item.getItemId()) {
             case OPTION_ADD_CONTACT:
                 // Add contacts
-                OpenConnectUtil.openSendRequestScreen(this);
+                OpenApplicationsUtil.openSendRequestScreen(this);
                 return true;
             case OPTION_SELECTED_PROFILE:
-                OpenConnectUtil.openMyProfileScreen(this, selectedProfPubKey);
+                OpenApplicationsUtil.openMyProfileScreen(this, selectedProfPubKey);
                 break;
             case OPTION_CHANGE_PROFILE:
                 // Open settings
