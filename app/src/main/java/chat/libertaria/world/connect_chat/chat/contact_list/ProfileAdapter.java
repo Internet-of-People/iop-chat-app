@@ -8,7 +8,7 @@ import org.libertaria.world.profile_server.ProfileInformation;
 
 import chat.libertaria.world.connect_chat.R;
 import tech.furszy.ui.lib.base.adapter.BaseAdapter;
-import tech.furszy.ui.lib.base.adapter.FermatListItemListeners;
+import tech.furszy.ui.lib.base.adapter.RecyclerListItemListeners;
 
 /**
  * Created by mati on 03/03/17.
@@ -16,9 +16,9 @@ import tech.furszy.ui.lib.base.adapter.FermatListItemListeners;
 public class ProfileAdapter extends BaseAdapter<ProfileInformation, ProfileHolder> {
 
 
-    public ProfileAdapter(final Activity context, FermatListItemListeners<ProfileInformation> fermatListItemListeners) {
+    public ProfileAdapter(final Activity context, RecyclerListItemListeners<ProfileInformation> eventListener) {
         super(context);
-        setFermatListEventListener(fermatListItemListeners);
+        setListEventListener(eventListener);
 
     }
 

@@ -2,7 +2,6 @@ package chat.libertaria.world.connect_chat;
 
 
 import android.app.NotificationManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -14,26 +13,25 @@ import org.libertaria.world.profile_server.ProfileInformation;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import chat.libertaria.world.connect_chat.base.BaseActivity;
-import chat.libertaria.world.connect_chat.base.dialogs.DialogListener;
-import chat.libertaria.world.connect_chat.base.dialogs.SimpleDialog;
-import chat.libertaria.world.connect_chat.base.dialogs.SimpleTextDialog;
-import chat.libertaria.world.connect_chat.chat.settings.ChangeProfileActivity;
 import chat.libertaria.world.connect_chat.chat.store.RemoteProfilesStore;
-import chat.libertaria.world.connect_chat.utils.DialogsUtil;
 import world.libertaria.sdk.android.client.ConnectApp;
+import world.libertaria.sdk.android.client.ConnectClientService;
+
+import static world.libertaria.shared.library.global.client.IntentBroadcastConstants.ACTION_IOP_SERVICE_CONNECTED;
+import static world.libertaria.shared.library.global.client.IntentBroadcastConstants.ACTION_IOP_SERVICE_DISCONNECTED;
 
 /**
  * Created by furszy on 8/2/17.
  */
 
-public class ChatApp extends ConnectApp{
+public class ChatApp extends ConnectApp {
 
-    public static final String INTENT_SERVICE_CONNECTED = "service_connected";
+    public static final String INTENT_SERVICE_CONNECTED = ACTION_IOP_SERVICE_CONNECTED;
+    public static final String INTENT_SERVICE_DISCONNECTED = ACTION_IOP_SERVICE_DISCONNECTED;
     public static final String INTENT_PROFILE_NOT_EXIST_ON_THE_PLATFORM = "profile_not_exist_on_the_platform";
 
     public static final String INTENT_ACTION_PROFILE_CONNECTED = "profile_connected";
-    public static final String INTENT_ACTION_PROFILE_CHECK_IN_FAIL= "profile_check_in_fail";
+    public static final String INTENT_ACTION_PROFILE_CHECK_IN_FAIL = "profile_check_in_fail";
     public static final String INTENT_ACTION_PROFILE_DISCONNECTED = "profile_disconnected";
 
     public static final String INTENT_EXTRA_ERROR_DETAIL = "error_detail";
@@ -43,7 +41,9 @@ public class ChatApp extends ConnectApp{
     public static final String INTENT_CHAT_TEXT_BROADCAST = "chat_text";
     public static final String INTENT_CHAT_TEXT_RECEIVED = "text";
 
-    /** Preferences */
+    /**
+     * Preferences
+     */
     public static final String PREFS_NAME = "app_prefs";
 
     private NotificationManager notificationManager;
@@ -51,12 +51,14 @@ public class ChatApp extends ConnectApp{
 
     private static volatile ChatApp instance;
 
-    /** Pub key of the selected profile */
+    /**
+     * Pub key of the selected profile
+     */
     private String selectedProfilePubKey;
     private AppConf appConf;
     private AtomicBoolean existProfile = new AtomicBoolean(true);
 
-    public static ChatApp getInstance(){
+    public static ChatApp getInstance() {
         return instance;
     }
 
@@ -75,29 +77,24 @@ public class ChatApp extends ConnectApp{
     }
 
     public File getDirPrivateMode(String name) {
-        return getDir(name,MODE_PRIVATE);
+        return getDir(name, MODE_PRIVATE);
     }
 
     @Override
-    protected void onConnectClientServiceBind() {
-        //super.onConnectClientServiceBind();
-        Log.i("ChatApp","onConnectClientServiceBind");
+    protected void onConnectClientServiceBind(ConnectClientService clientService) {
+        super.onConnectClientServiceBind(clientService);
+        Log.i("ChatApp", "onConnectClientServiceBind");
 
-        if (isClientServiceBound() && isConnectedToPlatform()) {
-            try {
-                // check if the profile is the same that we have saved here or the user have to select one of the list.
-                ProfileInformation selectedProfile = getProfilesModule().getProfile(appConf.getSelectedProfPubKey());
-                if (selectedProfile == null) {
-                    existProfile.set(false);
-                } else {
-                    existProfile.set(true);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            // check if the profile is the same that we have saved here or the user have to select one of the list.
+            ProfileInformation selectedProfile = getProfilesModule().getProfile(appConf.getSelectedProfPubKey());
+            if (selectedProfile == null) {
+                existProfile.set(false);
+            } else {
+                existProfile.set(true);
             }
-
-            Intent intent = new Intent(INTENT_SERVICE_CONNECTED);
-            broadcastManager.sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -125,7 +122,7 @@ public class ChatApp extends ConnectApp{
 
     public void setSelectedProfile(String selectedProfile) {
         // check if profile exists
-        if(getProfilesModule().getProfile(selectedProfile)!=null){
+        if (getProfilesModule().getProfile(selectedProfile) != null) {
             existProfile.set(true);
         }
         this.selectedProfilePubKey = selectedProfile;

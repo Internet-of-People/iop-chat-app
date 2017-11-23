@@ -3,34 +3,34 @@
     package="chat.libertaria.world.connect_chat">
 
     <application
-        android:allowBackup="false"
         android:name=".ChatApp"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:persistent="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".chat.local_profiles.LocalProfilesActivity"
-            >
+        <activity android:name=".chat.local_profiles.LocalProfilesActivity">
 
         </activity>
-        <activity android:name=".chat.init.InitActivity"
-            android:excludeFromRecents="true"
-            >
+        <activity android:name=".chat.init.InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            </activity>
-        <activity android:name=".chat.contact_list.ChatContactActivity"/>
-        <activity android:name=".chat.welcome.MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
         </activity>
-        <activity android:name=".chat.WaitingChatActivity"/>
-        <activity android:name=".chat.ChatActivity"/>
-        <activity android:name=".chat.settings.ChangeProfileActivity"/>
+        <activity android:name=".chat.contact_list.ChatContactActivity" />
+        <activity
+            android:name=".chat.welcome.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+        </activity>
+        <activity android:name=".chat.WaitingChatActivity" />
+        <activity android:name=".chat.ChatActivity" />
+        <activity android:name=".chat.settings.ChangeProfileActivity" />
 
-        <receiver android:name="ChatModuleReceiver"
+        <receiver
+            android:name="ChatModuleReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="org.furszy.broadcast.on_chat_connected"></action>

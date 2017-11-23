@@ -33,7 +33,8 @@ public class BaseAppFragment extends Fragment {
     private BroadcastReceiver appReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(INTENT_SERVICE_CONNECTED)){
+            System.out.println("New intent received! " + intent);
+            if (intent.getAction().equals(INTENT_SERVICE_CONNECTED)) {
                 loadBasics();
                 onServiceConnected();
             }
@@ -44,15 +45,21 @@ public class BaseAppFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
         loadBasics();
-        localBroadcastManager.registerReceiver(appReceiver,new IntentFilter(INTENT_SERVICE_CONNECTED));
+        localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        getActivity().registerReceiver(appReceiver, new IntentFilter(INTENT_SERVICE_CONNECTED));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        localBroadcastManager.unregisterReceiver(appReceiver);
+        getActivity().unregisterReceiver(appReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadBasics();
     }
 
     public void loadBasics() {
@@ -66,7 +73,7 @@ public class BaseAppFragment extends Fragment {
     /**
      * Method to override
      */
-    protected void onServiceConnected(){
+    protected void onServiceConnected() {
 
     }
 }
