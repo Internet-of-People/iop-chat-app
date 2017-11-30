@@ -18,6 +18,7 @@ import java.util.List;
 import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseAppFragment;
 import chat.libertaria.world.connect_chat.chat.contact_list.ProfileHolder;
+import world.libertaria.shared.library.util.OpenApplicationsUtil;
 
 /**
  * Created by furszy on 8/11/17.
@@ -41,7 +42,7 @@ public class SelectProfileFragment extends BaseAppFragment {
         btn_open_app.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                OpenApplicationsUtil.openConnectApplication(getContext());
             }
         });
 

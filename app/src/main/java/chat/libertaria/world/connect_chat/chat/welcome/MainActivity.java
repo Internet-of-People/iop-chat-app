@@ -1,28 +1,18 @@
 package chat.libertaria.world.connect_chat.chat.welcome;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,8 +22,7 @@ import chat.libertaria.world.connect_chat.R;
 import chat.libertaria.world.connect_chat.base.BaseActivity;
 import chat.libertaria.world.connect_chat.chat.contact_list.ChatContactActivity;
 import chat.libertaria.world.connect_chat.utils.CustomFontTextView;
-
-import static chat.libertaria.world.connect_chat.R.id.text;
+import world.libertaria.shared.library.util.OpenApplicationsUtil;
 
 /**
  * Created by furszy on 8/10/17.
@@ -53,10 +42,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreateView(Bundle savedInstanceState, ViewGroup container) {
-        getLayoutInflater().inflate(R.layout.tutorial_activity,container,true);
+        getLayoutInflater().inflate(R.layout.tutorial_activity, container, true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().hide();
-        spinner = (Spinner)findViewById(R.id.spinner);
+        spinner = (Spinner) findViewById(R.id.spinner);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         btnNext = (Button) findViewById(R.id.btn_next);
 
@@ -88,7 +77,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             viewPager.setCurrentItem(current);
         } else {
             // save profile and init app
-            if(checkSelectedProfile()) {
+            if (checkSelectedProfile()) {
                 app.getAppConf().setAppInit();
                 launchHomeScreen();
             }
@@ -108,13 +97,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     btnNext.setText(getString(R.string.select_profile));
                     txt_title.setText(getString(R.string.select_profile_title));
                 } else {
-                    if(checkSelectedProfile()) {
+                    if (checkSelectedProfile()) {
                         btnNext.setText(getString(R.string.start));
                         txt_title.setText(getString(R.string.start_chatting));
-                    }else
+                    } else
                         return;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -134,15 +123,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (app.getSelectedProfilePubKey() == null) {
             // try to get the profile
             String profPubKey = ((SelectProfileFragment) viewPagerAdapter.getItem(1)).getSelectedProfileKey();
-            if (profPubKey!=null){
+            if (profPubKey != null) {
                 app.setSelectedProfile(profPubKey);
                 return true;
-            }else {
+            } else {
                 viewPager.setCurrentItem(1);
                 Toast.makeText(MainActivity.this, "Please choose a profile to continue", Toast.LENGTH_LONG).show();
                 return false;
             }
-        }else {
+        } else {
             return true;
         }
 
@@ -186,19 +175,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    public static class WelcomeScreenFragment extends Fragment{
+    public static class WelcomeScreenFragment extends Fragment {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.tutorial_slide1,container,false);
+            return inflater.inflate(R.layout.tutorial_slide1, container, false);
         }
     }
 
-    public static class StartFragment extends Fragment{
+    public static class StartFragment extends Fragment {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.tutorial_slide3,container,false);
+            return inflater.inflate(R.layout.tutorial_slide3, container, false);
         }
     }
 
